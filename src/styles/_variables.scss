@@ -1,0 +1,27 @@
+// COLOR PALETTES
+$color1: #F0556E;
+$color1-opacity-9: rgba(240,85,110, 0.9);
+$color2: #43C4D9;
+$color2-opacity-40: rgba(67, 196, 217, 0.4);
+$color3: #434343;
+$color4: #F6F6F6;
+$color5: #FAA952;
+$color-bg-transparent: rgba(249, 102, 102, 0.155);
+
+// Bootstrap
+$primary: $color1;
+$secondary: $color2;
+$success: $color2;
+$info: $color3;
+$warning: $color4;
+$danger: $color1;
+$light: $color4;
+$dark: $color3;
+$font-family-sans-serif: "Poppins";
+$navbar-nav-link-padding-x: 1rem;
+$navbar-light-color: $color1;
+$navbar-light-hover-color: $color2;
+$navbar-light-active-color: $color2;
+$nav-link-font-weight: 600;
+
+
