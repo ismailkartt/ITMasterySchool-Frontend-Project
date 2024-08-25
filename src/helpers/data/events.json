@@ -1,0 +1,65 @@
+[
+    {
+        "id": 1,
+        "title": "Introduction to Programming",
+        "description": "Join our comprehensive Introduction to Programming",
+        "date": "2023-09-15",
+        "time": "10:00 AM",
+        "location": "Room 101",
+        "image": "events-01.jpg"
+    },
+    {
+        "id": 2,
+        "title": "Web Development Fundamentals",
+        "description": "Embark on a journey into the world of web development",
+        "date": "2023-09-18",
+        "time": "2:00 PM",
+        "location": "Computer Lab A",
+        "image": "events-01.jpg"
+    },
+    {
+        "id": 3,
+        "title": "Introduction to Algorithms",
+        "description": "Unlock the power of algorithms in our Introduction to Algorithms",
+        "date": "2023-09-20",
+        "time": "9:00 AM",
+        "location": "Room 205",
+        "image": "events-01.jpg"
+    },
+    {
+        "id": 4,
+        "title": "Data Structures Deep Dive",
+        "description": "Explore the critical components of computer science with our Data Structures course",
+        "date": "2024-09-22",
+        "time": "11:00 AM",
+        "location": "Room 101",
+        "image": "events-01.jpg"
+    },
+    {
+        "id": 5,
+        "title": "Software Engineering Principles",
+        "description": "Learn the core principles behind effective software engineering",
+        "date": "2024-09-24",
+        "time": "3:00 PM",
+        "location": "Computer Lab B",
+        "image": "events-01.jpg"
+    },
+    {
+        "id": 6,
+        "title": "Advanced JavaScript Techniques",
+        "description": "Master JavaScript with our advanced techniques class",
+        "date": "2024-09-26",
+        "time": "1:00 PM",
+        "location": "Computer Lab A",
+        "image": "events-01.jpg"
+    },
+    {
+        "id": 7,
+        "title": "Responsive Web Design",
+        "description": "Create dynamic websites that look great on any device with our Responsive Web Design course",
+        "date": "2024-09-28",
+        "time": "10:00 AM",
+        "location": "Room 205",
+        "image": "events-01.jpg"
+    }
+]

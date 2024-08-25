@@ -1,18 +1,8 @@
 import React from 'react'
-import Topbar from './components/common/topbar'
-import Menubar from './components/common/menubar'
-import Footer from './components/common/footer'
-import Slider from './components/slider'
+import AppRouter from './router'
 
 const App = () => {
-  return (
-    <>  
-      <Topbar/>
-      <Menubar/>
-      <Slider/>
-      <Footer/>
-    </>
-  )
+  return <AppRouter/>
 }
 
 export default App

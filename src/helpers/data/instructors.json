@@ -1,0 +1,46 @@
+[
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Smith",
+      "title": "Senior IT Instructor",
+      "image": "instructor-01.jpg"
+    },
+    {
+      "id": 2,
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "title": "IT Professor",
+      "image": "instructor-02.jpg"
+    },
+    {
+      "id": 3,
+      "firstName": "Sarah",
+      "lastName": "Johnson",
+      "title": "IT Specialist",
+      "image": "instructor-03.jpg"
+    },
+    {
+      "id": 4,
+      "firstName": "Michael",
+      "lastName": "Brown",
+      "title": "Network Engineer",
+      "image": "instructor-04.jpg"
+    },
+    {
+      "id": 5,
+      "firstName": "Laura",
+      "lastName": "White",
+      "title": "Software Developer",
+      "image": "instructor-05.jpg"
+    },
+    {
+      "id": 6,
+      "firstName": "Robert",
+      "lastName": "Green",
+      "title": "Database Administrator",
+      "image": "instructor-06.jpg"
+    }
+   
+  ]
+  

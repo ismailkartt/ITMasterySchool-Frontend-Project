@@ -1,7 +1,7 @@
 import React from "react";
 import "./slider.scss";
 import { Carousel, Image } from "react-bootstrap";
-import slides from "../../helpers/data/slider.json";
+import slides from "../../../helpers/data/slider.json";
 
 const Slider = () => {
   return (

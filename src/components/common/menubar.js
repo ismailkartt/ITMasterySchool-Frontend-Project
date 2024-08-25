@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import "./menubar.scss"
 import { Container, Image, Nav, Navbar, Offcanvas } from 'react-bootstrap'
 import { config } from '../../helpers/config'
 import { FiAperture, FiAward, FiCalendar, FiHeadphones, FiHome } from 'react-icons/fi'
 
 const Menubar = () => {
 
-  const [mode, setMode] = useState("light")
+  const [mode, setMode] = useState("white")
 
   const handleScrool = () => { 
       const scroolYPosition = window.scrollY;
