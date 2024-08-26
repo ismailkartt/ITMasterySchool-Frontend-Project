@@ -1,9 +1,8 @@
 import React from 'react'
+import "./upcoming-events.scss"
 import { Card } from 'react-bootstrap'
-import { FiUser, FiTrendingUp, FiDollarSign } from 'react-icons/fi'
-import "./course-card.scss"
 
-const CourseCard = ({image, title, user, rating, price}) => {
+const EventCard = () => {
   return (
     <Card className="course-card">
         <Card.Body>
@@ -21,4 +20,4 @@ const CourseCard = ({image, title, user, rating, price}) => {
   )
 }
 
-export default CourseCard
+export default EventCard

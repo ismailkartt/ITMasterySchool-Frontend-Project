@@ -9,7 +9,7 @@ const Menubar = () => {
 
   const handleScrool = () => { 
       const scroolYPosition = window.scrollY;
-      if(scroolYPosition > 250){
+      if(scroolYPosition > 50){
         setMode("dark");
       }else{
         setMode("white"); 
