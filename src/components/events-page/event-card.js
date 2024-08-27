@@ -1,20 +1,20 @@
 import React from 'react'
 import "./upcoming-events.scss"
 import { Card } from 'react-bootstrap'
+import { FiClock , FiMapPin } from 'react-icons/fi'
 
-const EventCard = () => {
+const EventCard = ({image, title, time , location}) => {
   return (
-    <Card className="course-card">
+    <Card className="event-card">
         <Card.Body>
           <div className="image"> 
-          <Card.Img variant="top" src={`/images/courses/${image}`} alt={title} className='img-fluid'/>
+          <Card.Img variant="top" src={`/images/events/${image}`} alt={title} className='img-fluid'/>
           </div>
-          <Card.Title>{title}</Card.Title>
           <Card.Subtitle>
-            <div><FiUser/> {user}</div>
-            <div><FiTrendingUp/> {rating}</div>
-            <div><FiDollarSign/> {price}</div>
+            <div><FiClock/> {time}</div>
+            <div><FiMapPin/> {location}</div>
           </Card.Subtitle>
+          <Card.Title>{title}</Card.Title>
         </Card.Body>
       </Card>
   )
