@@ -17,10 +17,15 @@
         align-items: center;
         
         &:last-child{
-            justify-content: end;
+            justify-content: start;
             button{
                 margin-left: 10px;
             }
+
+            @media (min-width:992px) {
+                justify-content: end;
+            }
+
         }
 
     }

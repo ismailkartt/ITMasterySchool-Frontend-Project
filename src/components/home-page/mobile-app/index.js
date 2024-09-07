@@ -11,7 +11,7 @@ const MobileApp = () => {
             <Col md={7}>
                 <h1>Are you ready to start your online course</h1>
             </Col>
-            <Col md={5} className='justify-content-start'>
+            <Col md={5}>
                 <Button variant='outline-warning'><FaApple/> App Store</Button>
                 <Button variant='outline-warning'><FaGooglePlay/> Play Store</Button>
             </Col>
