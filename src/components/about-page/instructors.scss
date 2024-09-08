@@ -1,0 +1,17 @@
+@use "../../styles/variables" as v;
+
+.instructors {
+  div[class^="col"]:first-child {
+    h2 {
+      background-color: v.$color1;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      font-size: 2rem;
+      height: 100%;
+      @media(min-with: 450px) {
+        font-size: 3rem;
+      }
+    }
+  }
+}

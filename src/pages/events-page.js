@@ -1,17 +1,19 @@
 import React from 'react'
 import PageHeader from '../components/common/page-header'
 import Spacer from '../components/common/spacer'
-import Courses from '../components/courses-page/courses'
+import Events from '../components/events-page/events'
 
-const CoursesPage = () => {
+
+
+const EventsPage = () => {
   return (
     <>
-        <PageHeader title="Courses" />
+        <PageHeader title="Events"/>
         <Spacer/>
-        <Courses/>
+        <Events/>
         <Spacer/>
     </>
   )
 }
 
-export default CoursesPage
+export default EventsPage

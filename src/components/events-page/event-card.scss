@@ -13,6 +13,7 @@
     .card-subtitle{
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
         align-items: center;
         color: v.$color1;
         margin-top: 10px;
