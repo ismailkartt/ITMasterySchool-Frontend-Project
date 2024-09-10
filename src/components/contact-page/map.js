@@ -4,7 +4,7 @@ import { config } from "../../helpers/config";
 const Map = () => {
   console.log("Map URL:", config.contact.mapEmbedURL);
   return (
-    <div>
+    
       <iframe
         src={config.contact.mapEmbedURL}
         width="100%"
@@ -12,8 +12,10 @@ const Map = () => {
         allowFullScreen=""
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
+        style={{display: 'block'}}
+        title="map"
       ></iframe>
-    </div>
+
   );
 };
 
