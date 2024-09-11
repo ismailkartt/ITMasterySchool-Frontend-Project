@@ -7,6 +7,7 @@ import EventsPage from '../pages/events-page'
 import AboutPage from '../pages/about-page'
 import ContactPage from '../pages/contact-page'
 import LoginPage from '../pages/login-page'
+import DashboardPage from '../pages/dashboard/dashboard-page'
 
 
 const router = createBrowserRouter([
@@ -37,6 +38,15 @@ const router = createBrowserRouter([
             {
                 path: "login",
                 element: <LoginPage/>,
+            },
+            {
+                path: "dashboard",
+                children: [
+                    {index: true,
+                     element: <DashboardPage/>   
+                    }
+
+                ]
             }
         ]
     }

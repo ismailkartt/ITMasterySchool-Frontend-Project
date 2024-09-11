@@ -1,18 +1,52 @@
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import * as Yup from "yup";
 import PasswordInput from "../common/password-input";
+import { isInValid, isValid } from "../../helpers/functions/forms";
+import { swalAlert } from "../../helpers/functions/swal";
+import { login } from "../../api/auth-service";
+import { setToLocalStorage } from "../../helpers/functions/encrypted-store";
+import { useDispatch } from "react-redux";
+import {login as loginSuccess} from "../../store/slices/auth-slice";
+import ButtonLoader from "../common/button-loader";
+import { AiFillLock } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+
 
 const LoginForm = () => {
 
+    const [loading, setLoading] = useState(false)
+    const dispacth = useDispatch();
+    const navigate = useNavigate();
+
     const initialValues = {
-
+        password: "Berra123@",
+        username: "Berra",
     }
-    const validationSchema = Yup.object({})
+    const validationSchema = Yup.object({
+        password: Yup.string().required("Required"),
+        username: Yup.string().required("Required")
+    })
 
-    const onSubmit = (values) => {
+    const onSubmit = async (values) => {
+        setLoading(true)
+        try {
+            const resp = await login(values)
+            const { token } = resp;
+            setToLocalStorage("token",token);
 
+            dispacth(loginSuccess(resp));
+
+            navigate("/dashboard");
+
+        } catch (err) {
+            const errMsg = err.response.data.message;
+            swalAlert(errMsg, "error")
+        }
+        finally{
+            setLoading(false)
+        }
     }
 
     const formik = useFormik({
@@ -31,17 +65,30 @@ const LoginForm = () => {
                 <em>Please enter your username and password</em>
               </div>
 
-              <Form>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" />
+              <Form noValidate onSubmit={formik.handleSubmit}>
+                <Form.Group className="mb-3" controlId="userName">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control type="text" placeholder="Username"
+                    {...formik.getFieldProps("username")}
+                    isInvalid={isInValid(formik,"username")}
+                    isValid={isValid(formik,"username")}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                        {formik.errors.username}
+                  </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Group className="mb-3" controlId="password">
                   <Form.Label>Password</Form.Label>
-                  <PasswordInput/>
+                  <PasswordInput
+                    {...formik.getFieldProps("password")}
+                    isInvalid={isInValid(formik,"password")}
+                    isValid={isValid(formik,"password")}
+                    error={formik.errors.password}
+                  />
+                  
                 </Form.Group>
-                <Button variant="primary" type="submit" className="w-100">
-                  Submit
+                <Button variant="primary" type="submit" className="w-100" disabled={!(formik.isValid) || loading}>
+                {loading ? <ButtonLoader/> : <AiFillLock/>} Login
                 </Button>
               </Form>
             </Card.Body>
