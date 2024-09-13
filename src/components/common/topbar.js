@@ -3,6 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap'
 import { config } from '../../helpers/config'
 import "./topbar.scss";
 import { useSelector } from 'react-redux';
+import UserMenu from './user-menu';
 
 const Topbar = () => {
 
@@ -13,8 +14,9 @@ const Topbar = () => {
         <Container>
             <Row>
                 <Col md={10} className='d-none d-md-block'>📢 {config.project.slogan}</Col>
-                <Col md={2} className='text-center text-md-end'>Login</Col>
-                {isUserLogin ? `Hello ${user.name}` : "login"}
+                <Col md={2} className='text-center text-md-end'>
+                <UserMenu/>
+                </Col>
             </Row>
         </Container>
     </div>
