@@ -7,7 +7,7 @@ import UserMenu from './user-menu';
 
 const Topbar = () => {
 
-  const {isUserLogin, user} = useSelector(state => state.auth);
+  const {isUserLogin, user} = useSelector((state) => state.auth);
 
   return (
     <div className='topbar'>
