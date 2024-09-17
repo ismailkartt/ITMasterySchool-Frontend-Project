@@ -11,6 +11,7 @@ import DashboardPage from '../pages/dashboard/dashboard-page'
 import AdminManagementPage from '../pages/dashboard/admin-management-page'
 import PrivateRoute from './private-route'
 import { config } from '../helpers/config'
+import ManagerManagement from '../pages/dashboard/manager-management'
 
 
 const router = createBrowserRouter([
@@ -54,6 +55,9 @@ const router = createBrowserRouter([
                     },
                     {path: "admin-management",
                         element: <PrivateRoute roles={config.pageRoles.adminManagement}><AdminManagementPage/></PrivateRoute>   
+                    },
+                    {path: "manager-management",
+                        element: <PrivateRoute roles={config.pageRoles.managerManagement}><ManagerManagement/></PrivateRoute>   
                     }
 
                 ]

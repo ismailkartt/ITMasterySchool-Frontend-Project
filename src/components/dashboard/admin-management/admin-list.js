@@ -6,6 +6,7 @@ import { Column } from "primereact/column";
 import { FaTimes } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setOperation } from "../../../store/slices/misc-slice";
+import { swalAlert, swalConfirm } from "../../../helpers/functions/swal";
 
 const AdminList = () => {
   const [users, setUsers] = useState();
@@ -18,48 +19,66 @@ const AdminList = () => {
     page: 0,
     sortField: null,
     sortOrder: null,
-});
+  });
+
 
   const loadData = async (page) => {
     try {
-      const resp = await getAdminsByPage(page, lazyState.rows,);
-      setUsers(resp.content);
-      setTotalRows(resp.totalElements);
+      const resp = await getAdminsByPage(page, lazyState.rows);
+      setUsers(resp.content); 
+      setTotalRows(resp.totalElements); 
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
+
 
   const getFullName = (row) => {
     return `${row.name} ${row.surname}`;
   };
 
-  const onPage = (event) => { 
+  
+  const onPage = (event) => {
     setlazyState(event);
-   }
+  };
+
+
+  const handleDelete = async (row) => {
+    try {
+      const result = await swalConfirm("Are you sure to delete?"); 
+      if (result.isConfirmed) {
+        await deleteAdmin(row.id); 
+        swalAlert("Admin successfully deleted", "success");
+        loadData(lazyState.page); 
+      }
+    } catch (err) {
+      swalAlert("Admin could not be deleted", "error"); 
+    }
+  };
+  
+  const handleNewAdmin = () => {
+    dispatch(setOperation("new")); 
+  };
+
+
+  useEffect(() => {
+    loadData(lazyState.page);
+  }, [lazyState]);
 
   const getOperationButtons = (row) => {
     if (row.built_in) {
-      return null;
+      return null; 
     }
     return (
       <div>
-        <Button className="btn-link">
+        <Button className="btn-link" onClick={() => handleDelete(row)}> 
           <FaTimes />
         </Button>
       </div>
     );
   };
-
-  const handleNewAdmin = () => { 
-    dispatch(setOperation("new"));
-   }
-
-  useEffect(() => {
-    loadData(lazyState.page);
-  }, [lazyState]);
 
   return (
     <Container>
@@ -78,16 +97,15 @@ const AdminList = () => {
             value={users}
             paginator
             rows={lazyState.rows}
-            rowsPerPageOptions={[5, 10, 25, 50]}
             first={lazyState.first}
-            onPage={onPage}
+            onPage={onPage} 
           >
-            <Column body={getFullName} header="Name"></Column>
-            <Column field="gender" header="Gender"></Column>
+            <Column body={getFullName} header="Name"></Column> 
+            <Column field="gender" header="Gender"></Column> 
             <Column field="phoneNumber" header="Phone Number"></Column>
             <Column field="ssn" header="SSN"></Column>
-            <Column field="username" header="User Name"></Column>
-            <Column body={getOperationButtons}></Column>
+            <Column field="username" header="User Name"></Column> 
+            <Column body={getOperationButtons}></Column> 
           </DataTable>
         </Card.Body>
       </Card>
