@@ -1,5 +1,9 @@
-import { useFormik } from "formik";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
+import { setOperation } from "../../../store/slices/misc-slice";
+import { swalAlert } from "../../../helpers/functions/swal";
+import { useFormik } from "formik";
 import {
   Button,
   Card,
@@ -9,30 +13,19 @@ import {
   Form,
   Row,
 } from "react-bootstrap";
-import * as Yup from "yup";
 import { isInValid, isValid } from "../../../helpers/functions/forms";
-import { useDispatch } from "react-redux";
-import { setOperation } from "../../../store/slices/misc-slice";
-import { createAdmin } from "../../../api/admin-service";
-import { swalAlert } from "../../../helpers/functions/swal";
 import ButtonLoader from "../../common/button-loader";
 
-const NewAdminForm = () => {
+const EditManagerForm = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const { currentRecord } = useSelector((state) => state.misc);
 
-  const initialValues = {
-    birthDay: "",
-    birthPlace: "",
-    gender: "",
-    name: "",
+  const initialValues = { 
+    ...currentRecord,
     password: "",
-    confirmPassword: "",
-    phoneNumber: "",
-    ssn: "",
-    surname: "",
-    username: "",
-  };
+    confirmPassowrd: ""
+   };
 
   const validationSchema = Yup.object({
     name: Yup.string().required("required"),
@@ -61,13 +54,11 @@ const NewAdminForm = () => {
   });
 
   const onSubmit = async (values) => {
-    setLoading(true);
-
     try {
-      await createAdmin(values);
+      // await createManager(values);
       formik.resetForm();
       dispatch(setOperation(null));
-      swalAlert("Admin created successfully", "success");
+      swalAlert("Manager created successfully", "success");
     } catch (err) {
       console.log(err);
       const errMsg = Object.values(err.response.data.validations)[0];
@@ -86,13 +77,14 @@ const NewAdminForm = () => {
     initialValues,
     validationSchema,
     onSubmit,
+    enableReinitialize: true,
   });
 
   return (
     <Container>
       <Card>
         <Card.Body>
-          <Card.Title>New Admin</Card.Title>
+          <Card.Title>New Manager</Card.Title>
           <Form noValidate onSubmit={formik.handleSubmit}>
             <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
               <Col>
@@ -148,7 +140,6 @@ const NewAdminForm = () => {
                   </Form.Control.Feedback>
                 </FloatingLabel>
               </Col>
-
               <Col>
                 <FloatingLabel
                   controlId="birthdate"
@@ -167,7 +158,6 @@ const NewAdminForm = () => {
                   </Form.Control.Feedback>
                 </FloatingLabel>
               </Col>
-
               <Col>
                 <FloatingLabel
                   controlId="placeofbirth"
@@ -186,7 +176,6 @@ const NewAdminForm = () => {
                   </Form.Control.Feedback>
                 </FloatingLabel>
               </Col>
-
               <Col>
                 <FloatingLabel controlId="phone" label="Phone" className="mb-3">
                   <Form.Control
@@ -286,7 +275,7 @@ const NewAdminForm = () => {
                   disabled={!(formik.dirty && formik.isValid) || loading}
                   className="ms-3"
                 >
-                  {loading && <ButtonLoader />}Create
+                  {loading && <ButtonLoader />}Update
                 </Button>
               </Col>
             </Row>
@@ -297,4 +286,4 @@ const NewAdminForm = () => {
   );
 };
 
-export default NewAdminForm;
+export default EditManagerForm;

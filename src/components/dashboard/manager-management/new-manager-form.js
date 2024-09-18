@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import * as Yup from "yup";
 import { createManager } from "../../../api/manager-service";
 import { setOperation } from "../../../store/slices/misc-slice";
-import { Form, useFormik } from "formik";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { swalAlert } from "../../../helpers/functions/swal";
+import { useFormik } from "formik";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  FloatingLabel,
+  Form,
+  Row,
+} from "react-bootstrap";
+import { isInValid, isValid } from "../../../helpers/functions/forms";
+import ButtonLoader from "../../common/button-loader";
 
 const NewManagerForm = () => {
   const dispatch = useDispatch();
@@ -53,7 +65,7 @@ const NewManagerForm = () => {
       await createManager(values);
       formik.resetForm();
       dispatch(setOperation(null));
-      swalAlert("Admin created successfully", "success");
+      swalAlert("Manager created successfully", "success");
     } catch (err) {
       console.log(err);
       const errMsg = Object.values(err.response.data.validations)[0];
@@ -115,7 +127,6 @@ const NewManagerForm = () => {
                   <Form.Control.Feedback type="invalid">
                     {formik.touched.surname && formik.errors.surname}
                   </Form.Control.Feedback>
-                  
                 </FloatingLabel>
               </Col>
               <Col>
@@ -253,18 +264,24 @@ const NewManagerForm = () => {
                     isInvalid={isInValid(formik, "confirmPassword")}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {formik.touched.confirmPassword && formik.errors.confirmPassword}
+                    {formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword}
                   </Form.Control.Feedback>
                 </FloatingLabel>
               </Col>
             </Row>
             <Row>
               <Col className="text-end">
-                <Button variant="warning" type="button" onClick={handleCancel} >
+                <Button variant="warning" type="button" onClick={handleCancel}>
                   Cancel
                 </Button>
-                <Button variant="secondary" type="submit" disabled={!(formik.dirty && formik.isValid) || loading}>
-                  {loading && <ButtonLoader/>}Create
+                <Button
+                  variant="secondary"
+                  type="submit"
+                  disabled={!(formik.dirty && formik.isValid) || loading}
+                  className="ms-3"
+                >
+                  {loading && <ButtonLoader />}Create
                 </Button>
               </Col>
             </Row>

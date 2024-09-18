@@ -49,7 +49,7 @@ const UpcomingEvents = () => {
           }
         >
           {upcomingEvents.map((event)=>(
-               <SwiperSlide> <EventCard key={event.id} {...event}/></SwiperSlide>   
+               <SwiperSlide key={event.id}> <EventCard {...event}/></SwiperSlide>   
             ))}
        
           

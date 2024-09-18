@@ -2,10 +2,11 @@ import React from 'react'
 import PageHeader from '../../components/common/page-header'
 import Spacer from '../../components/common/spacer'
 import { useSelector } from 'react-redux'
-import NewAdminForm from '../../components/dashboard/admin-management/new-admin-form'
 import ManagerList from '../../components/dashboard/manager-management/manager-list'
+import NewManagerForm from '../../components/dashboard/manager-management/new-manager-form'
+import EditManagerForm from '../../components/dashboard/manager-management/edit-manager-form'
 
-const ManagerManagement = () => {
+const ManagerManagementPage = () => {
 
     const { currentOperation } = useSelector((state) => state.misc);
 
@@ -16,7 +17,15 @@ const ManagerManagement = () => {
         {
             currentOperation === "new" && (
                 <>
-                    <NewAdminForm/>
+                    <NewManagerForm/>
+                    <Spacer/>
+                </>
+            )
+        }
+        {
+            currentOperation === "edit" && (
+                <>
+                    <EditManagerForm/>
                     <Spacer/>
                 </>
             )
@@ -27,4 +36,4 @@ const ManagerManagement = () => {
   )
 }
 
-export default ManagerManagement
+export default ManagerManagementPage

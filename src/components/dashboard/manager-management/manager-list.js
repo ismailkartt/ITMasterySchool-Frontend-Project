@@ -4,9 +4,10 @@ import React, { useEffect, useState } from 'react'
 import { Button, Card, Container } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { swalAlert, swalConfirm } from '../../../helpers/functions/swal'
-import { FaTimes } from 'react-icons/fa'
-import { deleteManager, getManagerByPage } from '../../../api/manager-service'
-import { setOperation } from '../../../store/slices/misc-slice'
+import { FaEdit, FaTimes } from 'react-icons/fa'
+import { deleteManager, getManagersByPage } from '../../../api/manager-service'
+import { setCurrentRecord, setOperation } from '../../../store/slices/misc-slice'
+
 
 const ManagerList = () => {
   
@@ -24,7 +25,7 @@ const ManagerList = () => {
 
   const loadData = async (page) => {
     try {
-      const resp = await getManagerByPage(page, lazyState.rows);
+      const resp = await getManagersByPage(page, lazyState.rows);
       setUsers(resp.content);
       setTotalRows(resp.totalElements);
     } catch (err) {
@@ -42,25 +43,32 @@ const ManagerList = () => {
     setlazyState(event);
   }
 
-  const handleDelete = async (row) => {
+  const handleDelete = async (id) => {
+    const resp = await swalConfirm("Are you sure to delete?");
+    if (!resp.isConfirmed) return;
+    setLoading(true);
     try {
-      const result = await swalConfirm("Are you sure to delete?");
-      if(result.isConfirmed){
-        await deleteManager(row.userId);
-        swalAlert("Manager successfully deleted", "success");
-        loadData(lazyState.page);
-      }
+      await deleteManager(id);
+      swalAlert("Manager was deleted", "success");
     } catch (err) {
-      swalAlert("Manager could not be deleted", "error"); 
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-  const handleNewAdmin = () => {
+  const handleEdit = (row) => { 
+    dispatch(setCurrentRecord(row));
+    dispatch(setOperation("edit"));
+   }
+
+  const handleNewUser = () => {
     dispatch(setOperation("new"));
   }
 
   useEffect(() => {
     loadData(lazyState.page);
+    // eslint-disable-next-line
   }, [lazyState]);
   
 
@@ -70,7 +78,10 @@ const ManagerList = () => {
     }
     return (
       <div>
-        <Button className='btn-link' onClick={() => handleDelete(row)}>
+        <Button className='btn-link' onClick={() => handleEdit(row)}>
+          <FaEdit/>
+        </Button>
+        <Button className='btn-link' onClick={() => handleDelete(row.userId)}>
           <FaTimes/>
         </Button>
       </div>
@@ -83,12 +94,12 @@ const ManagerList = () => {
         <Card.Body>
           <Card.Title className='d-flex justify-content-between'>
             <span>Manager List</span>
-            <Button onClick={handleNewAdmin}>New Manager</Button>
+            <Button onClick={handleNewUser}>New Manager</Button>
           </Card.Title>
 
           <DataTable
             lazy
-            dataKey="id"
+            dataKey="userId"
             totalRecords={totalRows}
             loading={loading}
             value={users}
@@ -103,7 +114,7 @@ const ManagerList = () => {
             <Column field="phoneNumber" header="Phone Number"></Column>
             <Column field="ssn" header="SSN"></Column>
             <Column field="username" header="User Name"></Column> 
-            <Column body={getOperationButtons}></Column>  
+            <Column body={getOperationButtons} headerStyle={{width: "120px"}}></Column>  
 
 
           </DataTable>

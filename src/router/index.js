@@ -11,7 +11,9 @@ import DashboardPage from '../pages/dashboard/dashboard-page'
 import AdminManagementPage from '../pages/dashboard/admin-management-page'
 import PrivateRoute from './private-route'
 import { config } from '../helpers/config'
-import ManagerManagement from '../pages/dashboard/manager-management'
+import ManagerManagementPage from '../pages/dashboard/manager-management-page'
+import Error404Page from '../pages/errors/error-404'
+import Error401Page from '../pages/errors/error-401'
 
 
 const router = createBrowserRouter([
@@ -44,10 +46,6 @@ const router = createBrowserRouter([
                 element: <LoginPage/>,
             },
             {
-                path: "unauthorized",
-                element: <LoginPage/>,
-            },
-            {
                 path: "dashboard",
                 children: [
                     {index: true,
@@ -57,10 +55,19 @@ const router = createBrowserRouter([
                         element: <PrivateRoute roles={config.pageRoles.adminManagement}><AdminManagementPage/></PrivateRoute>   
                     },
                     {path: "manager-management",
-                        element: <PrivateRoute roles={config.pageRoles.managerManagement}><ManagerManagement/></PrivateRoute>   
+                        element: <PrivateRoute roles={config.pageRoles.managerManagement}><ManagerManagementPage/></PrivateRoute>   
                     }
 
                 ]
+            },
+            {
+                path: "unauthorized",
+                element: <Error401Page/>,
+            }
+            ,
+            {
+                path: "*",
+                element: <Error404Page/>
             }
         ]
     }

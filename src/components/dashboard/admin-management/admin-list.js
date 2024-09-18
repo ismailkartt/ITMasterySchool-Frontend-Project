@@ -45,26 +45,29 @@ const AdminList = () => {
   };
 
 
-  const handleDelete = async (row) => {
+  const handleDelete = async (id) => {
+    const resp = await swalConfirm("Are you sure to delete?");
+    if (!resp.isConfirmed) return;
+    setLoading(true);
     try {
-      const result = await swalConfirm("Are you sure to delete?"); 
-      if (result.isConfirmed) {
-        await deleteAdmin(row.id); 
-        swalAlert("Admin successfully deleted", "success");
-        loadData(lazyState.page); 
-      }
+      await deleteAdmin(id);
+      swalAlert("Admin was deleted", "success");
     } catch (err) {
-      swalAlert("Admin could not be deleted", "error"); 
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
   
-  const handleNewAdmin = () => {
+  
+  const handleNewUser = () => {
     dispatch(setOperation("new")); 
   };
 
 
   useEffect(() => {
     loadData(lazyState.page);
+    // eslint-disable-next-line
   }, [lazyState]);
 
   const getOperationButtons = (row) => {
@@ -73,7 +76,7 @@ const AdminList = () => {
     }
     return (
       <div>
-        <Button className="btn-link" onClick={() => handleDelete(row)}> 
+        <Button className="btn-link" onClick={() => handleDelete(row.id)}> 
           <FaTimes />
         </Button>
       </div>
@@ -86,7 +89,7 @@ const AdminList = () => {
         <Card.Body>
           <Card.Title className="d-flex justify-content-between">
             <span>Admin List</span>
-            <Button onClick={handleNewAdmin}>New Admin</Button>
+            <Button onClick={handleNewUser}>New Admin</Button>
           </Card.Title>
 
           <DataTable
@@ -105,7 +108,7 @@ const AdminList = () => {
             <Column field="phoneNumber" header="Phone Number"></Column>
             <Column field="ssn" header="SSN"></Column>
             <Column field="username" header="User Name"></Column> 
-            <Column body={getOperationButtons}></Column> 
+            <Column body={getOperationButtons} headerStyle={{width: "120px"}}></Column> 
           </DataTable>
         </Card.Body>
       </Card>

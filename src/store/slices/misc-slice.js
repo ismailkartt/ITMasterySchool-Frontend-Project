@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    currentOperation: null
+    currentOperation: null,
+    currentRecord: null
 }
 
 export const miscSlice = createSlice({
@@ -10,9 +11,12 @@ export const miscSlice = createSlice({
     reducers:{
         setOperation: (state, action) => {
             state.currentOperation = action.payload;
+        },
+        setCurrentRecord: (state, action) => {
+            state.currentRecord = action.payload;
         }
     }
 })
 
-export const { setOperation } = miscSlice.actions;
+export const { setOperation, setCurrentRecord } = miscSlice.actions;
 export default miscSlice.reducer;
