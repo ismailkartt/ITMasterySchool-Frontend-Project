@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { createManager } from "../../../api/manager-service";
-import { setOperation } from "../../../store/slices/misc-slice";
+import { setListRefreshToken, setOperation } from "../../../store/slices/misc-slice";
 import { swalAlert } from "../../../helpers/functions/swal";
 import { useFormik } from "formik";
 import {
@@ -65,6 +65,7 @@ const NewManagerForm = () => {
       await createManager(values);
       formik.resetForm();
       dispatch(setOperation(null));
+      dispatch(setListRefreshToken(Math.random()));
       swalAlert("Manager created successfully", "success");
     } catch (err) {
       console.log(err);
@@ -186,7 +187,7 @@ const NewManagerForm = () => {
                 <FloatingLabel controlId="phone" label="Phone" className="mb-3">
                   <Form.Control
                     type="text"
-                    placeholder=""
+                    placeholder="XXX-XXX-XXXX"
                     {...formik.getFieldProps("phoneNumber")}
                     isValid={isValid(formik, "phoneNumber")}
                     isInvalid={isInValid(formik, "phoneNumber")}
@@ -201,7 +202,7 @@ const NewManagerForm = () => {
                 <FloatingLabel controlId="ssn" label="SSN" className="mb-3">
                   <Form.Control
                     type="text"
-                    placeholder=""
+                    placeholder="XXX-XX-XXXX"
                     {...formik.getFieldProps("ssn")}
                     isValid={isValid(formik, "ssn")}
                     isInvalid={isInValid(formik, "ssn")}

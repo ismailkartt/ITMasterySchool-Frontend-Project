@@ -5,13 +5,13 @@ import { Button, Card, Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { swalAlert, swalConfirm } from '../../../helpers/functions/swal'
 import { FaEdit, FaTimes } from 'react-icons/fa'
-import { deleteManager, getManagersByPage } from '../../../api/manager-service'
-import { setCurrentRecord, setOperation } from '../../../store/slices/misc-slice'
+import { setCurrentRecord, setListRefreshToken, setOperation } from '../../../store/slices/misc-slice'
+import { deleteAsisstantManager, getAsisstantManagersByPage } from '../../../api/asisstant-manager-service'
 
 
-const ManagerList = () => {
+const AssistantManagerList = () => {
   
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState();
   const [loading, setLoading] = useState(true);
   const [totalRows, setTotalRows] = useState(0);
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ const ManagerList = () => {
 
   const loadData = async (page) => {
     try {
-      const resp = await getManagersByPage(page, lazyState.rows);
+      const resp = await getAsisstantManagersByPage(page, lazyState.rows);
       setUsers(resp.content);
       setTotalRows(resp.totalElements);
     } catch (err) {
@@ -50,8 +50,9 @@ const ManagerList = () => {
     if (!resp.isConfirmed) return;
     setLoading(true);
     try {
-      await deleteManager(id);
-      swalAlert("Manager was deleted", "success");
+      await deleteAsisstantManager(id);
+      dispatch(setListRefreshToken(Math.random()));
+      swalAlert("Assistant Manager was deleted", "success");
     } catch (err) {
       console.log(err);
     } finally {
@@ -95,8 +96,8 @@ const ManagerList = () => {
       <Card>
         <Card.Body>
           <Card.Title className='d-flex justify-content-between'>
-            <span>Manager List</span>
-            <Button onClick={handleNewUser}>New Manager</Button>
+            <span>Assistant Manager List</span>
+            <Button onClick={handleNewUser}>New Assistant Manager</Button> 
           </Card.Title>
 
           <DataTable
@@ -127,4 +128,4 @@ const ManagerList = () => {
   )
 }
 
-export default ManagerList
+export default AssistantManagerList

@@ -1,5 +1,9 @@
-import { useFormik } from "formik";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import * as Yup from "yup";
+import { setListRefreshToken, setOperation } from "../../../store/slices/misc-slice";
+import { swalAlert } from "../../../helpers/functions/swal";
+import { useFormik } from "formik";
 import {
   Button,
   Card,
@@ -9,15 +13,11 @@ import {
   Form,
   Row,
 } from "react-bootstrap";
-import * as Yup from "yup";
 import { isInValid, isValid } from "../../../helpers/functions/forms";
-import { useDispatch } from "react-redux";
-import { setListRefreshToken, setOperation } from "../../../store/slices/misc-slice";
-import { createAdmin } from "../../../api/admin-service";
-import { swalAlert } from "../../../helpers/functions/swal";
 import ButtonLoader from "../../common/button-loader";
+import { createTeacher } from "../../../api/teacher-service";
 
-const NewAdminForm = () => {
+const NewTeacherForm = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
@@ -61,14 +61,12 @@ const NewAdminForm = () => {
   });
 
   const onSubmit = async (values) => {
-    setLoading(true);
-
     try {
-      await createAdmin(values);
+      await createTeacher(values);
       formik.resetForm();
-      dispatch(setListRefreshToken(Math.random()))
       dispatch(setOperation(null));
-      swalAlert("Admin created successfully", "success");
+      dispatch(setListRefreshToken(Math.random()));
+      swalAlert("Teacher was created successfully", "success");
     } catch (err) {
       console.log(err);
       const errMsg = Object.values(err.response.data.validations)[0];
@@ -93,7 +91,7 @@ const NewAdminForm = () => {
     <Container>
       <Card>
         <Card.Body>
-          <Card.Title>New Admin</Card.Title>
+          <Card.Title>New Teacher</Card.Title>
           <Form noValidate onSubmit={formik.handleSubmit}>
             <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
               <Col>
@@ -149,7 +147,6 @@ const NewAdminForm = () => {
                   </Form.Control.Feedback>
                 </FloatingLabel>
               </Col>
-
               <Col>
                 <FloatingLabel
                   controlId="birthdate"
@@ -168,7 +165,6 @@ const NewAdminForm = () => {
                   </Form.Control.Feedback>
                 </FloatingLabel>
               </Col>
-
               <Col>
                 <FloatingLabel
                   controlId="placeofbirth"
@@ -187,7 +183,6 @@ const NewAdminForm = () => {
                   </Form.Control.Feedback>
                 </FloatingLabel>
               </Col>
-
               <Col>
                 <FloatingLabel controlId="phone" label="Phone" className="mb-3">
                   <Form.Control
@@ -298,4 +293,4 @@ const NewAdminForm = () => {
   );
 };
 
-export default NewAdminForm;
+export default NewTeacherForm;
