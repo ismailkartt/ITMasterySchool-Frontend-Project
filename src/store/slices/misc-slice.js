@@ -5,7 +5,7 @@ const initialState = {
     currentRecord: null,
     listRefreshToken: null
 }
-
+    
 export const miscSlice = createSlice({
     name: "misc",
     initialState,

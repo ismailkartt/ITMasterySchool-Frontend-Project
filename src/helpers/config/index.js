@@ -38,8 +38,7 @@ export const config = {
   },
   educationTerms: [
     { label: "Fall", key: "FALL_SEMESTER" },
-    { label: "Spring", key: "SPRİNG_SEMESTER" },
-    { label: "Autumn", key: "AUTMN_SEMESTER" },
+    { label: "Spring", key: "SPRING_SEMESTER" },
   ],
   days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
 };

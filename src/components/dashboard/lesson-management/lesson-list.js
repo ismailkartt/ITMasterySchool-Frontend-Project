@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { swalAlert, swalConfirm } from '../../../helpers/functions/swal'
 import {  FaTimes } from 'react-icons/fa'
 import {   setListRefreshToken, setOperation } from '../../../store/slices/misc-slice'
-import { deleteEducationTerm, getEducationTermsByPage } from '../../../api/education-term-service'
+import { deleteLesson, getLessonsByPage } from '../../../api/lesson-service'
 
 
-const EducationTermList = () => {
+const LessonList = () => {
   
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,7 @@ const EducationTermList = () => {
 
   const loadData = async (page) => {
     try {
-      const resp = await getEducationTermsByPage(page, lazyState.rows);
+      const resp = await getLessonsByPage(page, lazyState.rows);
       setList(resp.content);
       setTotalRows(resp.totalElements);
     } catch (err) {
@@ -46,9 +46,9 @@ const EducationTermList = () => {
     if (!resp.isConfirmed) return;
     setLoading(true);
     try {
-      await deleteEducationTerm(id);
+      await deleteLesson(id);
       dispatch(setListRefreshToken(Math.random()));
-      swalAlert("Term was deleted", "success");
+      swalAlert("Lesson was deleted", "success");
     } catch (err) {
       console.log(err);
     } finally {
@@ -85,7 +85,7 @@ const EducationTermList = () => {
         <Card.Body>
           <Card.Title className='d-flex justify-content-between'>
             <span>Term List</span>
-            <Button onClick={handleNewRecord}>New Term</Button>
+            <Button onClick={handleNewRecord}>New Lesson</Button>
           </Card.Title>
 
           <DataTable
@@ -115,4 +115,4 @@ const EducationTermList = () => {
   )
 }
 
-export default EducationTermList
+export default LessonList
