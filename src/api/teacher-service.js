@@ -18,6 +18,13 @@ export const createTeacher = async (payload) => {
     return data;
 } 
 
+export const getAllTeachers = async () => {
+    const resp = await axios.get(`${baseUrl}/teachers/getAll`,
+        {headers: getAuthHeader()})
+    const data = await resp.data;
+    return data;
+} 
+
 export const deleteTeacher = async (id) => {
     const resp = await axios.delete(`${baseUrl}/teachers/delete/${id}`,
         {headers: getAuthHeader()})
@@ -27,6 +34,13 @@ export const deleteTeacher = async (id) => {
 
 export const updateTeacher = async (id, payload) => {
     const resp = await axios.put(`${baseUrl}/teachers/update/${id}`, payload,
+        {headers: getAuthHeader()})
+    const data = await resp.data;
+    return data;
+}
+
+export const chooseLesson = async (payload) => {
+    const resp = await axios.post(`${baseUrl}/teachers/chooseLesson`, payload,
         {headers: getAuthHeader()})
     const data = await resp.data;
     return data;

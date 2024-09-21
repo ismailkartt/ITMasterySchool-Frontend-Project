@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { swalAlert, swalConfirm } from '../../../helpers/functions/swal'
 import {  FaTimes } from 'react-icons/fa'
 import {   setListRefreshToken, setOperation } from '../../../store/slices/misc-slice'
-import { deleteLesson, getLessonsByPage } from '../../../api/lesson-service'
+import { deleteLessonProgram, getLessonProgramsByPage } from '../../../api/lesson-program-service'
 
 
-const LessonList = () => {
+const LessonProgramList = () => {
   
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,7 @@ const LessonList = () => {
 
   const loadData = async (page) => {
     try {
-      const resp = await getLessonsByPage(page, lazyState.rows);
+      const resp = await getLessonProgramsByPage(page, lazyState.rows);
       setList(resp.content);
       setTotalRows(resp.totalElements);
     } catch (err) {
@@ -46,15 +46,19 @@ const LessonList = () => {
     if (!resp.isConfirmed) return;
     setLoading(true);
     try {
-      await deleteLesson(id);
+      await deleteLessonProgram(id);
       dispatch(setListRefreshToken(Math.random()));
-      swalAlert("Lesson was deleted", "success");
+      swalAlert("Program was deleted", "success");
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
   };
+
+  const getLessonsNames = (row) => { 
+    return row.lessonName.map((item)=>item.lessonName).join("-")
+   }
 
   const handleNewRecord = () => {
     dispatch(setOperation("new"));
@@ -72,7 +76,7 @@ const LessonList = () => {
     }
     return (
       <div>
-        <Button className='btn-link' onClick={() => handleDelete(row.lessonId)}>
+        <Button className='btn-link' onClick={() => handleDelete(row.lessonProgramId)}>
           <FaTimes/>
         </Button>
       </div>
@@ -84,13 +88,13 @@ const LessonList = () => {
       <Card>
         <Card.Body>
           <Card.Title className='d-flex justify-content-between'>
-            <span>Term List</span>
-            <Button onClick={handleNewRecord}>New Lesson</Button>
+            <span>Lesson Program List</span>
+            <Button onClick={handleNewRecord}>New Lesson Program</Button>
           </Card.Title>
 
           <DataTable
             lazy
-            dataKey="lessonId"
+            dataKey="lessonProgramId"
             totalRecords={totalRows}
             loading={loading}
             value={list}
@@ -100,9 +104,10 @@ const LessonList = () => {
             onPage={onPage}
           >
           
-            <Column field='lessonName' header="Term"></Column> 
-            <Column field="creditScore" header="Credit"></Column> 
-            <Column field="compulsory" header="Compulsory"></Column>
+            <Column body={getLessonsNames} header="Lessons"></Column> 
+            <Column field='day' header="Day"></Column> 
+            <Column field="startTime" header="Start Time"></Column> 
+            <Column field="stopTime" header="Stop Time"></Column>
             <Column body={getOperationButtons} headerStyle={{width: "120px"}}></Column>  
 
 
@@ -114,4 +119,4 @@ const LessonList = () => {
   )
 }
 
-export default LessonList
+export default LessonProgramList

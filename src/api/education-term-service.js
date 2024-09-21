@@ -18,6 +18,13 @@ export const createEducationTerm = async (payload) => {
     return data;
 } 
 
+export const getAllEducationTerm = async () => {
+    const resp = await axios.get(`${baseUrl}/educationTerms/getAll`,
+        {headers: getAuthHeader()})
+    const data = await resp.data;
+    return data;
+} 
+
 export const deleteEducationTerm = async (id) => {
     const resp = await axios.delete(`${baseUrl}/educationTerms/${id}`,
         {headers: getAuthHeader()})

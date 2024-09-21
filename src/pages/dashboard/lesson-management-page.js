@@ -5,6 +5,11 @@ import { Tab, Tabs } from "react-bootstrap";
 import EducationTermList from "../../components/dashboard/lesson-management/education-term-list";
 import NewEducationTermForm from "../../components/dashboard/lesson-management/new-education-term-form";
 import { useSelector } from "react-redux";
+import LessonList from "../../components/dashboard/lesson-management/lesson-list";
+import NewLessonForm from "../../components/dashboard/lesson-management/new-lesson-form";
+import LessonProgramList from "../../components/dashboard/lesson-management/lesson-program-list";
+import NewLessonProgramForm from "../../components/dashboard/lesson-management/new-lesson-program-form";
+import LessonAssignment from "../../components/dashboard/lesson-management/lesson-assignment";
 
 const LessonManagementPage = () => {
 
@@ -33,12 +38,27 @@ const LessonManagementPage = () => {
           <EducationTermList/>
         </Tab>
         <Tab eventKey="lessons" title="Lessons">
-          Tab content for Profile
+        <Spacer height={30}/>
+        {currentOperation === "new" &&
+           <>
+            <NewLessonForm/>
+            <Spacer height={30}/>
+            </>}
+         <LessonList/>
         </Tab>
         <Tab eventKey="programs" title="Lesson Programs">
-          Tab content for Contact
+        <Spacer height={30}/>
+        {currentOperation === "new" &&
+           <>
+            <NewLessonProgramForm/>
+            <Spacer height={30}/>
+            </>}
+         <LessonProgramList/>   
+         <Spacer height={30}/>   
+         <LessonAssignment/>
         </Tab>
       </Tabs>
+      <Spacer height={30}/>
     </>
   );
 };
