@@ -9,7 +9,7 @@
         { "title": "Contacts", "link": "/dashboard/contact-messages" }
     ],
     "manager": [
-        { "title": "Manager Management", "link": "/dashboard/asistant-manager-management" },
+        { "title": "Assistant Manager Management", "link": "/dashboard/assistant-manager-management" },
         { "title": "Contacts", "link": "/dashboard/contact-messages" }
     ],
     "assistantmanager": [

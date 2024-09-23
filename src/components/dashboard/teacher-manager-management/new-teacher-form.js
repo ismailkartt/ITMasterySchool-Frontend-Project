@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { setListRefreshToken, setOperation } from "../../../store/slices/misc-slice";
@@ -16,10 +16,13 @@ import {
 import { isInValid, isValid } from "../../../helpers/functions/forms";
 import ButtonLoader from "../../common/button-loader";
 import { createTeacher } from "../../../api/teacher-service";
+import { MultiSelect } from "primereact/multiselect";
+import { getAllLessonPrograms } from "../../../api/lesson-program-service";
 
 const NewTeacherForm = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [lessonPrograms, setLessonPrograms] = useState([]);
 
   const initialValues = {
     birthDay: "",
@@ -32,14 +35,17 @@ const NewTeacherForm = () => {
     ssn: "",
     surname: "",
     username: "",
+    isAdvisorTeacher: false,
+    lessonsIdList: []
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("required"),
-    username: Yup.string().required("required"),
-    surname: Yup.string().required("required"),
+    name: Yup.string().required("Required"),
+    username: Yup.string().required("Required"),
+    surname: Yup.string().required("Required"),
+    lessonsIdList: Yup.array().required("Required"),
     password: Yup.string()
-      .required("required")
+      .required("Required")
       .min(8, "At least 8 characters")
       .matches(/[a-z]+/g, "Onelowercase char")
       .matches(/[A-Z]+/g, "One uppercase char")
@@ -48,28 +54,29 @@ const NewTeacherForm = () => {
       .required("required")
       .oneOf([Yup.ref("password")], "Password must match"),
     gender: Yup.string()
-      .required("required")
+      .required("Required")
       .oneOf(["FEMALE", "MALE"], "Invalid gender"),
-    birthDay: Yup.date().required("required"),
-    birthPlace: Yup.string().required("required"),
+    birthDay: Yup.date().required("Required"),
+    birthPlace: Yup.string().required("Required"),
     phoneNumber: Yup.string()
-      .required("required")
+      .required("Required")
       .matches(/^\d{3}-\d{3}-\d{4}$/, "Invalid phone number format"),
     ssn: Yup.string()
-      .required("required")
+      .required("Required")
       .matches(/^\d{3}-\d{2}-\d{4}$/),
+    email: Yup.string().email("Invalid email").required("Required"),  
   });
 
   const onSubmit = async (values) => {
     try {
       await createTeacher(values);
       formik.resetForm();
-      dispatch(setOperation(null));
       dispatch(setListRefreshToken(Math.random()));
+      dispatch(setOperation(null));
       swalAlert("Teacher was created successfully", "success");
     } catch (err) {
       console.log(err);
-      const errMsg = Object.values(err.response.data.validations)[0];
+      const errMsg = err.response.data.message;
       swalAlert(errMsg, "error");
     } finally {
       setLoading(false);
@@ -86,6 +93,26 @@ const NewTeacherForm = () => {
     validationSchema,
     onSubmit,
   });
+
+  const loadLessonPrograms = async () => {
+    try {
+      const data = await getAllLessonPrograms();
+
+      const arr = data.map((program) =>({
+        lessonProgramId: program.lessonProgramId,
+        lessonName: program.lessonName.map((item)=>item.lessonName).join("-")
+      }))
+
+      setLessonPrograms(arr);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    loadLessonPrograms();
+  }, [])
+  
 
   return (
     <Container>
@@ -184,10 +211,10 @@ const NewTeacherForm = () => {
                 </FloatingLabel>
               </Col>
               <Col>
-                <FloatingLabel controlId="phone" label="Phone" className="mb-3">
+                <FloatingLabel controlId="phone" label="Phone (XXX-XXX-XXXX)" className="mb-3">
                   <Form.Control
                     type="text"
-                    placeholder="XXX-XXX-XXXX"
+                    placeholder="Phone (XXX-XXX-XXXX)"
                     {...formik.getFieldProps("phoneNumber")}
                     isValid={isValid(formik, "phoneNumber")}
                     isInvalid={isInValid(formik, "phoneNumber")}
@@ -199,10 +226,25 @@ const NewTeacherForm = () => {
               </Col>
 
               <Col>
-                <FloatingLabel controlId="ssn" label="SSN" className="mb-3">
+                <FloatingLabel controlId="email" label="Email" className="mb-3">
+                  <Form.Control
+                    type="email"
+                    placeholder=""
+                    {...formik.getFieldProps("email")}
+                    isValid={isValid(formik, "email")}
+                    isInvalid={isInValid(formik, "email")}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {formik.touched.email && formik.errors.email}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Col>
+
+              <Col>
+                <FloatingLabel controlId="ssn" label="SSN (XXX-XX-XXXX)" className="mb-3">
                   <Form.Control
                     type="text"
-                    placeholder="XXX-XX-XXXX"
+                    placeholder="SSN (XXX-XC-XXXX)"
                     {...formik.getFieldProps("ssn")}
                     isValid={isValid(formik, "ssn")}
                     isInvalid={isInValid(formik, "ssn")}
@@ -211,6 +253,39 @@ const NewTeacherForm = () => {
                     {formik.touched.ssn && formik.errors.ssn}
                   </Form.Control.Feedback>
                 </FloatingLabel>
+              </Col>
+
+              <Col>
+                  <Form.Check
+                    id="isAdvisor"
+                    type="checkbox"
+                    label="Is Advisor Teacher"
+                    {...formik.getFieldProps("isAdvisorTeacher")}
+                  />
+              </Col>
+
+              <Col>
+              <MultiSelect
+                  value={formik.values.lessonsIdList}
+                  onChange={(e) =>
+                    formik.setFieldValue("lessonsIdList", e.value)
+                  }
+                  options={lessonPrograms}
+                  display="chip"
+                  placeholder="Select Lessons"
+                  className="w-100"
+                  optionLabel="lessonName"
+                  optionValue="lessonProgramId"
+                  style={{
+                    width: "100%",
+                  }}
+                  panelStyle={{
+                    maxWidth: "100%",
+                  }}
+                  valueStyle={{
+                    maxWidth: "calc(100% - 32px)",
+                  }}
+                />
               </Col>
 
               <Col>

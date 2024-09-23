@@ -4,14 +4,14 @@ import React, { useEffect, useState } from 'react'
 import { Button, Card, Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { swalAlert, swalConfirm } from '../../../helpers/functions/swal'
-import { FaEdit, FaTimes } from 'react-icons/fa'
-import { setCurrentRecord, setListRefreshToken, setOperation } from '../../../store/slices/misc-slice'
-import { deleteTeacher, getTeachersByPage } from '../../../api/teacher-service'
+import {  FaTimes } from 'react-icons/fa'
+import {   setListRefreshToken, setOperation } from '../../../store/slices/misc-slice'
+import { deleteStudentInfo, getStudentInfoByPage } from '../../../api/student-info-service'
 
 
-const TeacherList = () => {
+const StudentInfoList = () => {
   
-  const [users, setUsers] = useState([]);
+  const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalRows, setTotalRows] = useState(0);
   const dispatch = useDispatch();
@@ -27,18 +27,14 @@ const TeacherList = () => {
 
   const loadData = async (page) => {
     try {
-      const resp = await getTeachersByPage(page, lazyState.rows);
-      setUsers(resp.content);
+      const resp = await getStudentInfoByPage(page, lazyState.rows);
+      setList(resp.content);
       setTotalRows(resp.totalElements);
     } catch (err) {
       console.log(err);
     } finally{
       setLoading(false);
     }
-  }
-
-  const getFullName = (row) => {
-    return `${row.name} ${row.surname}`;
   }
 
   const onPage = (event) => {
@@ -50,9 +46,9 @@ const TeacherList = () => {
     if (!resp.isConfirmed) return;
     setLoading(true);
     try {
-      await deleteTeacher(id);
-      dispatch(setListRefreshToken(Math.random()))
-      swalAlert("Teacher was deleted", "success");
+      await deleteStudentInfo(id);
+      dispatch(setListRefreshToken(Math.random()));
+      swalAlert("Student info was deleted", "success");
     } catch (err) {
       console.log(err);
     } finally {
@@ -60,12 +56,7 @@ const TeacherList = () => {
     }
   };
 
-  const handleEdit = (row) => { 
-    dispatch(setCurrentRecord(row));
-    dispatch(setOperation("edit"));
-   }
-
-  const handleNewUser = () => {
+  const handleNewRecord = () => {
     dispatch(setOperation("new"));
   }
 
@@ -81,14 +72,15 @@ const TeacherList = () => {
     }
     return (
       <div>
-        <Button className='btn-link' onClick={() => handleEdit(row)}>
-          <FaEdit/>
-        </Button>
-        <Button className='btn-link' onClick={() => handleDelete(row.userId)}>
+        <Button className='btn-link' onClick={() => handleDelete(row.id)}>
           <FaTimes/>
         </Button>
       </div>
     )
+  }
+
+  const getFullName = (row) => { 
+    return `${row.name} ${row.surname}`
   }
 
   return (
@@ -96,30 +88,30 @@ const TeacherList = () => {
       <Card>
         <Card.Body>
           <Card.Title className='d-flex justify-content-between'>
-            <span>Teacher List</span>
-            <Button onClick={handleNewUser}>New Teacher</Button> 
+            <span>Student Info List</span>
+            <Button onClick={handleNewRecord}>New Info</Button>
           </Card.Title>
 
           <DataTable
             lazy
-            dataKey="userId"
+            dataKey="id"
             totalRecords={totalRows}
             loading={loading}
-            value={users}
+            value={list}
             paginator
             rows={lazyState.rows}
             first={lazyState.first}
             onPage={onPage}
           >
-          
             <Column body={getFullName} header="Name"></Column> 
-            <Column field="gender" header="Gender"></Column> 
-            <Column field="phoneNumber" header="Phone Number"></Column>
-            <Column field="ssn" header="SSN"></Column>
-            <Column field="username" header="User Name"></Column> 
+            <Column field="lessonName" header="Lesson"></Column> 
+            <Column field="absentee" header="Absentee"></Column>
+            <Column field="midtermExam" header="Midterm"></Column>
+            <Column field="finalExam" header="Final"></Column>
+            <Column field="note" header="Score"></Column>
+            <Column field="average" header="Average"></Column>
+            <Column field="infoNote" header="Note"></Column>
             <Column body={getOperationButtons} headerStyle={{width: "120px"}}></Column>  
-
-
           </DataTable>
 
         </Card.Body>
@@ -128,4 +120,4 @@ const TeacherList = () => {
   )
 }
 
-export default TeacherList
+export default StudentInfoList

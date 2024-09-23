@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import { setListRefreshToken, setOperation } from "../../../store/slices/misc-slice";
+import {
+  setListRefreshToken,
+  setOperation,
+} from "../../../store/slices/misc-slice";
 import { swalAlert } from "../../../helpers/functions/swal";
 import { useFormik } from "formik";
 import {
@@ -15,30 +18,30 @@ import {
 } from "react-bootstrap";
 import { isInValid, isValid } from "../../../helpers/functions/forms";
 import ButtonLoader from "../../common/button-loader";
-import { getTeacherById, updateTeacher } from "../../../api/teacher-service";
-import { MultiSelect } from "primereact/multiselect";
-import { getAllLessonPrograms } from "../../../api/lesson-program-service";
+import { getAllAdvisorTeachers } from "../../../api/advisor-teacher-service";
+import { updateStudent } from "../../../api/student-service";
 
-const EditTeacherForm = () => {
+const EditStudentForm = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [lessonPrograms, setLessonPrograms] = useState([]);
-  
+  const [advisorTeachers, setAdvisorTeachers] = useState([]);
   const { currentRecord } = useSelector((state) => state.misc);
 
-  const initialValues = { 
+  const initialValues = {
     ...currentRecord,
     password: "",
-    confirmPassowrd: "",
-    lessonsIdList: []
-   };
+    confirmPassword: ""
+  };
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("required"),
-    username: Yup.string().required("required"),
-    surname: Yup.string().required("required"),
+    name: Yup.string().required("Required"),
+    username: Yup.string().required("Required"),
+    surname: Yup.string().required("Required"),
+    motherName: Yup.string().required("Required"),
+    fatherName: Yup.string().required("Required"),
+    advisorTeacherId: Yup.number().required("Required"),
     password: Yup.string()
-      .required("required")
+      .required("Required")
       .min(8, "At least 8 characters")
       .matches(/[a-z]+/g, "Onelowercase char")
       .matches(/[A-Z]+/g, "One uppercase char")
@@ -47,58 +50,35 @@ const EditTeacherForm = () => {
       .required("required")
       .oneOf([Yup.ref("password")], "Password must match"),
     gender: Yup.string()
-      .required("required")
+      .required("Required")
       .oneOf(["FEMALE", "MALE"], "Invalid gender"),
-    birthDay: Yup.date().required("required"),
-    birthPlace: Yup.string().required("required"),
+    birthDay: Yup.date().required("Required"),
+    birthPlace: Yup.string().required("Required"),
     phoneNumber: Yup.string()
-      .required("required")
+      .required("Required")
       .matches(/^\d{3}-\d{3}-\d{4}$/, "Invalid phone number format"),
     ssn: Yup.string()
-      .required("required")
+      .required("Required")
       .matches(/^\d{3}-\d{2}-\d{4}$/),
+    email: Yup.string().email("Invalid email").required("Required"),
   });
 
   const onSubmit = async (values) => {
     setLoading(true);
     try {
-      await updateTeacher(values.userId,values);
+      await updateStudent(values.id,values);
       formik.resetForm();
-      dispatch(setListRefreshToken(Math.random()))
+      dispatch(setListRefreshToken(Math.random()));
       dispatch(setOperation(null));
-      swalAlert("Teacher was updated successfully", "success");
+      swalAlert("Student was created successfully", "success");
     } catch (err) {
       console.log(err);
-      const errMsg = Object.values(err.response.data.validations)[0];
+      const errMsg = err.response.data.message;
       swalAlert(errMsg, "error");
     } finally {
       setLoading(false);
     }
   };
-
-  const loadLessonPrograms = async () => {
-    try {
-      const data = await getAllLessonPrograms();
-
-      const arr = data.map((program) =>({
-        lessonProgramId: program.lessonProgramId,
-        lessonName: program.lessonName.map((item)=>item.lessonName).join("-")
-      }))
-      setLessonPrograms(arr);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getTeacher = async () => { 
-    try {
-      const data = await getTeacherById(currentRecord.userId);
-      const arr = data.object.lessonsProgramList.map(item=>item.id);
-      formik.setFieldValue("lessonsIdList",arr); 
-    } catch (err) {
-      console.log(err)
-    }
-   }
 
   const handleCancel = () => {
     formik.resetForm();
@@ -112,19 +92,24 @@ const EditTeacherForm = () => {
     enableReinitialize: true,
   });
 
-  useEffect(() => {
-    loadLessonPrograms();
-  }, [])
+  const loadAdvisorTeachers = async () => {
+    try {
+      const data = await getAllAdvisorTeachers();
+      setAdvisorTeachers(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    getTeacher();
-  }, [currentRecord])
+    loadAdvisorTeachers();
+  }, []);
 
   return (
     <Container>
       <Card>
         <Card.Body>
-          <Card.Title>Edit Teacher</Card.Title>
+          <Card.Title>Edit Student</Card.Title>
           <Form noValidate onSubmit={formik.handleSubmit}>
             <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
               <Col>
@@ -217,7 +202,11 @@ const EditTeacherForm = () => {
                 </FloatingLabel>
               </Col>
               <Col>
-                <FloatingLabel controlId="phone" label="Phone (XXX-XXX-XXXX)" className="mb-3">
+                <FloatingLabel
+                  controlId="phone"
+                  label="Phone (XXX-XXX-XXXX)"
+                  className="mb-3"
+                >
                   <Form.Control
                     type="text"
                     placeholder="Phone (XXX-XXX-XXXX)"
@@ -247,10 +236,52 @@ const EditTeacherForm = () => {
               </Col>
 
               <Col>
-                <FloatingLabel controlId="ssn" label="SSN (XXX-XX-XXXX)" className="mb-3">
+                <FloatingLabel
+                  controlId="motherName"
+                  label="Mother name"
+                  className="mb-3"
+                >
                   <Form.Control
                     type="text"
-                    placeholder="SSN (XXX-XX-XXXX)"
+                    placeholder=""
+                    {...formik.getFieldProps("motherName")}
+                    isValid={isValid(formik, "motherName")}
+                    isInvalid={isInValid(formik, "motherName")}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {formik.touched.motherName && formik.errors.motherName}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Col>
+
+              <Col>
+                <FloatingLabel
+                  controlId="fatherName"
+                  label="Father name"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder=""
+                    {...formik.getFieldProps("fatherName")}
+                    isValid={isValid(formik, "fatherName")}
+                    isInvalid={isInValid(formik, "fatherName")}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {formik.touched.fatherName && formik.errors.fatherName}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Col>
+
+              <Col>
+                <FloatingLabel
+                  controlId="ssn"
+                  label="SSN (XXX-XX-XXXX)"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="SSN (XXX-XC-XXXX)"
                     {...formik.getFieldProps("ssn")}
                     isValid={isValid(formik, "ssn")}
                     isInvalid={isInValid(formik, "ssn")}
@@ -262,37 +293,27 @@ const EditTeacherForm = () => {
               </Col>
 
               <Col>
-                  <Form.Check
-                    id="isAdvisor"
-                    type="checkbox"
-                    label="Is Advisor Teacher"
-                    checked={formik.values.isAdvisorTeacher}
-                    {...formik.getFieldProps("isAdvisorTeacher")}
-                  />
-              </Col>
-
-              <Col>
-              <MultiSelect
-                  value={formik.values.lessonsIdList}
-                  onChange={(e) =>
-                    formik.setFieldValue("lessonsIdList", e.value)
-                  }
-                  options={lessonPrograms}
-                  display="chip"
-                  placeholder="Select Lessons"
-                  className="w-100"
-                  optionLabel="lessonName"
-                  optionValue="lessonProgramId"
-                  style={{
-                    width: "100%",
-                  }}
-                  panelStyle={{
-                    maxWidth: "100%",
-                  }}
-                  valueStyle={{
-                    maxWidth: "calc(100% - 32px)",
-                  }}
-                />
+                <FloatingLabel
+                  controlId="advisorTeacher"
+                  label="Advisor Teacher"
+                  className="mb-3"
+                >
+                  <Form.Select
+                    {...formik.getFieldProps("advisorTeacherId")}
+                    isValid={isValid(formik, "advisorTeacherId")}
+                    isInvalid={isInValid(formik, "advisorTeacherId")}
+                  >
+                    <option value="">Select Teacher</option>
+                    {advisorTeachers.map((item) => (
+                      <option value={item.advisorTeacherId}>
+                        {item.teacherName} {item.teacherSurname}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {formik.touched.advisorTeacherId && formik.errors.advisorTeacherId}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
               </Col>
 
               <Col>
@@ -375,4 +396,4 @@ const EditTeacherForm = () => {
   );
 };
 
-export default EditTeacherForm;
+export default EditStudentForm;

@@ -18,6 +18,20 @@ export const getUnassignedPrograms = async () => {
     return data;
 }
 
+export const getAllLessonPrograms = async () => {
+    const resp = await axios.get(`${baseUrl}/lessonPrograms/getAll`,
+        {headers: getAuthHeader()})
+    const data = await resp.data;
+    return data;
+}
+
+export const getAllLessonProgramsByTeacher = async () => {
+    const resp = await axios.get(`${baseUrl}/lessonPrograms/getAllLessonProgramByTeacher`,
+        {headers: getAuthHeader()})
+    const data = await resp.data;
+    return data;
+}
+
 export const createLessonProgram = async (payload) => {
     const resp = await axios.post(`${baseUrl}/lessonPrograms/save`,payload,
         {headers: getAuthHeader()})

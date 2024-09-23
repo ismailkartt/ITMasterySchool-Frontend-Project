@@ -98,6 +98,7 @@ const ContactForm = () => {
             </InputGroup.Text>
             <Form.Control
               as="textarea"
+              placeholder="Subject"
               aria-label="With textarea"
               {...formik.getFieldProps("subject")}
               isValid={isValid(formik, "subject")}

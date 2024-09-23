@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { swalAlert, swalConfirm } from '../../../helpers/functions/swal'
 import { FaEdit, FaTimes } from 'react-icons/fa'
 import { setCurrentRecord, setListRefreshToken, setOperation } from '../../../store/slices/misc-slice'
-import { deleteTeacher, getTeachersByPage } from '../../../api/teacher-service'
+import { deleteStudent, getStudentsByPage } from '../../../api/student-service'
 
 
-const TeacherList = () => {
+const StudentList = () => {
   
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,7 @@ const TeacherList = () => {
 
   const loadData = async (page) => {
     try {
-      const resp = await getTeachersByPage(page, lazyState.rows);
+      const resp = await getStudentsByPage(page, lazyState.rows);
       setUsers(resp.content);
       setTotalRows(resp.totalElements);
     } catch (err) {
@@ -50,9 +50,9 @@ const TeacherList = () => {
     if (!resp.isConfirmed) return;
     setLoading(true);
     try {
-      await deleteTeacher(id);
+      await deleteStudent(id);
       dispatch(setListRefreshToken(Math.random()))
-      swalAlert("Teacher was deleted", "success");
+      swalAlert("Student was deleted", "success");
     } catch (err) {
       console.log(err);
     } finally {
@@ -96,8 +96,8 @@ const TeacherList = () => {
       <Card>
         <Card.Body>
           <Card.Title className='d-flex justify-content-between'>
-            <span>Teacher List</span>
-            <Button onClick={handleNewUser}>New Teacher</Button> 
+            <span>Student List</span>
+            <Button onClick={handleNewUser}>New Student</Button> 
           </Card.Title>
 
           <DataTable
@@ -128,4 +128,4 @@ const TeacherList = () => {
   )
 }
 
-export default TeacherList
+export default StudentList

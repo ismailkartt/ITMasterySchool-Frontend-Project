@@ -17,75 +17,98 @@ import Error401Page from '../pages/errors/error-401'
 import AssistantManagerManagementPage from '../pages/dashboard/assistant-manager-management-page'
 import TeacherManagementPage from '../pages/dashboard/teacher-management-page'
 import LessonManagementPage from '../pages/dashboard/lesson-management-page'
+import StudentManagementPage from '../pages/dashboard/student-management-page'
+import ContactMessagePage from '../pages/dashboard/contact-message-page'
+import StudentInfoManagementPage from '../pages/dashboard/student-info-management-page'
 
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <UserLayout/>,
+        element: <UserLayout />,
         children: [
             {
                 index: true,
-                element: <HomePage/>,
+                element: <HomePage />,
             },
             {
                 path: "courses",
-                element: <CoursesPage/>,
+                element: <CoursesPage />,
             },
             {
                 path: "events",
-                element: <EventsPage/>,
+                element: <EventsPage />,
             },
             {
                 path: "about",
-                element: <AboutPage/>,
+                element: <AboutPage />,
             },
             {
                 path: "contact",
-                element: <ContactPage/>,
+                element: <ContactPage />,
             },
             {
                 path: "login",
-                element: <LoginPage/>,
+                element: <LoginPage />,
             },
             {
                 path: "dashboard",
                 children: [
-                    {index: true,
-                     element: <PrivateRoute roles={config.pageRoles.dashboard}><DashboardPage/></PrivateRoute>   
+                    {
+                        index: true,
+                        element: <PrivateRoute roles={config.pageRoles.dashboard}><DashboardPage /></PrivateRoute>
                     },
-                    {path: "admin-management",
-                        element: <PrivateRoute roles={config.pageRoles.adminManagement}><AdminManagementPage/></PrivateRoute>   
+                    {
+                        path: "admin-management",
+                        element: <PrivateRoute roles={config.pageRoles.adminManagement}><AdminManagementPage /></PrivateRoute>
                     },
-                    {path: "manager-management",
-                        element: <PrivateRoute roles={config.pageRoles.managerManagement}><ManagerManagementPage/></PrivateRoute>   
+                    {
+                        path: "manager-management",
+                        element: <PrivateRoute roles={config.pageRoles.managerManagement}><ManagerManagementPage /></PrivateRoute>
                     },
-                    {path: "assistant-manager-management",
-                        element: <PrivateRoute roles={config.pageRoles.assistantManagerManagement}><AssistantManagerManagementPage/></PrivateRoute>   
+                    {
+                        path: "assistant-manager-management",
+                        element: <PrivateRoute roles={config.pageRoles.assistantManagerManagement}>
+                                    <AssistantManagerManagementPage />
+                                 </PrivateRoute>
+                    }
+                    ,
+                    {
+                        path: "lesson-management",
+                        element: <PrivateRoute roles={config.pageRoles.lessonManagement}><LessonManagementPage /></PrivateRoute>
                     },
-                    {path: "lesson-management",
-                        element: <PrivateRoute roles={config.pageRoles.lessonManagement}><LessonManagementPage/></PrivateRoute>   
+                    {
+                        path: "teacher-management",
+                        element: <PrivateRoute roles={config.pageRoles.teacherManagement}><TeacherManagementPage /></PrivateRoute>
                     },
-                    {path: "teacher-management",
-                        element: <PrivateRoute roles={config.pageRoles.teacherManagement}><TeacherManagementPage/></PrivateRoute>   
+                    {
+                        path: "student-management",
+                        element: <PrivateRoute roles={config.pageRoles.studentManagement}><StudentManagementPage /></PrivateRoute>
                     },
+                    {
+                        path: "student-info-management",
+                        element: <PrivateRoute roles={config.pageRoles.studentInfoManagement}><StudentInfoManagementPage /></PrivateRoute>
+                    },
+                    {
+                        path: "contact-messages",
+                        element: <PrivateRoute roles={config.pageRoles.contactManagement}><ContactMessagePage /></PrivateRoute>
+                    }
                 ]
             },
             {
                 path: "unauthorized",
-                element: <Error401Page/>,
-            }
-            ,
+                element: <Error401Page />,
+            },
             {
                 path: "*",
-                element: <Error404Page/>
+                element: <Error404Page />
             }
         ]
     }
 ])
 
-const AppRouter = () => { 
-    return <RouterProvider router={router}/>
+const AppRouter = () => {
+    return <RouterProvider router={router} />
 }
 
 export default AppRouter

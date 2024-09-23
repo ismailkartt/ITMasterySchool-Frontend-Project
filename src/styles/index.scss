@@ -10,3 +10,13 @@
 html {
     scroll-behavior: auto !important;
 }
+
+.p-multiselect{
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}

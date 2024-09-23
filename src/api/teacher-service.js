@@ -25,6 +25,13 @@ export const getAllTeachers = async () => {
     return data;
 } 
 
+export const getTeacherById = async (id) => {
+    const resp = await axios.get(`${baseUrl}/teachers/getSavedTeacherById/${id}`,
+        {headers: getAuthHeader()})
+    const data = await resp.data;
+    return data;
+} 
+
 export const deleteTeacher = async (id) => {
     const resp = await axios.delete(`${baseUrl}/teachers/delete/${id}`,
         {headers: getAuthHeader()})
