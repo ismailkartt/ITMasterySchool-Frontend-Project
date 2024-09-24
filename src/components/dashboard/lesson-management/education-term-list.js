@@ -26,6 +26,7 @@ const EducationTermList = () => {
   })
 
   const loadData = async (page) => {
+    setLoading(true);
     try {
       const resp = await getEducationTermsByPage(page, lazyState.rows);
       setList(resp.content);

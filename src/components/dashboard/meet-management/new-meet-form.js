@@ -18,51 +18,43 @@ import {
 } from "react-bootstrap";
 import { isInValid, isValid } from "../../../helpers/functions/forms";
 import ButtonLoader from "../../common/button-loader";
-import { config } from "../../../helpers/config";
-import { createLessonProgram } from "../../../api/lesson-program-service";
+import { createMeet } from "../../../api/meet-service";
+import { getAllStudent } from "../../../api/student-service";
 import { MultiSelect } from "primereact/multiselect";
-import { getAllLessons } from "../../../api/lesson-service";
-import { getAllEducationTerm } from "../../../api/education-term-service";
 
-const NewLessonProgramForm = () => {
+const NewMeetForm = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [lessons, setLessons] = useState([]);
-  const [terms, setTerms] = useState([]);
+  const [students, setStudents] = useState([]);
 
-  const today = new Date().toISOString().split("T")[0];
 
   const initialValues = {
-    lessonIdList: [],
-    day: "",
-    educationTermId: "",
+    date: "",
+    description: "",
     startTime: "",
     stopTime: "",
+    studentIds: []
   };
 
   const validationSchema = Yup.object({
-    lessonIdList: Yup.array().required("required"),
-    day: Yup.string().required("required").oneOf(config.days, "Invalid day"),
-    educationTermId: Yup.string().required("required"),
-    startTime: Yup.string().required("required"),
-    stopTime: Yup.string().required("required"),
+    description: Yup.string().required("Required"),
+    startTime: Yup.string().required("Required"),
+    stopTime: Yup.string().required("Required"),
+    date: Yup.date().required("Required"),
+    studentIds: Yup.array().required("Required"),
   });
 
   const onSubmit = async (values) => {
     setLoading(true);
     try {
-      await createLessonProgram(values);
+      await createMeet(values);
       formik.resetForm();
       dispatch(setListRefreshToken(Math.random()));
       dispatch(setOperation(null));
-      swalAlert("Program was created successfully", "success");
+      swalAlert("Meet was created successfully", "success");
     } catch (err) {
-      let errMsg = "";
-      if (err.response.data.validations) {
-        errMsg = Object.values(err.response.data.validations)[0];
-      } else {
-        errMsg = err.response.data.message;
-      }
+      console.log(err);
+      const errMsg = err.response.data.message;
       swalAlert(errMsg, "error");
     } finally {
       setLoading(false);
@@ -74,54 +66,44 @@ const NewLessonProgramForm = () => {
     dispatch(setOperation(null));
   };
 
-  const loadLessons = async () => {
-    try {
-      const data = await getAllLessons();
-      setLessons(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const loadEducationTerms = async () => {
-    try {
-      const data = await getAllEducationTerm();
-      setTerms(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit,
   });
 
+  const loadStudents = async () => {
+    try {
+      const data = await getAllStudent();
+      setStudents(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    loadLessons();
-    loadEducationTerms();
+    loadStudents();
   }, []);
 
   return (
     <Container>
       <Card>
         <Card.Body>
-          <Card.Title>New Program</Card.Title>
+          <Card.Title>New Student</Card.Title>
           <Form noValidate onSubmit={formik.handleSubmit}>
             <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
               <Col>
-                <MultiSelect
-                  value={formik.values.lessonIdList}
+              <MultiSelect
+                  value={formik.values.studentIds}
                   onChange={(e) =>
-                    formik.setFieldValue("lessonIdList", e.value)
+                    formik.setFieldValue("studentIds", e.value)
                   }
-                  options={lessons}
+                  options={students}
                   display="chip"
-                  placeholder="Select Lessons"
+                  placeholder="Select students"
                   className="w-full"
-                  optionLabel="lessonName"
-                  optionValue="lessonId"
+                  optionValue="userId"
+                  optionLabel="name"
                   style={{
                     width: "100%",
                   }}
@@ -133,45 +115,21 @@ const NewLessonProgramForm = () => {
                   }}
                 />
               </Col>
-
               <Col>
-                <FloatingLabel controlId="term" label="Term" className="mb-3">
-                  <Form.Select
-                    aria-label="Floating label select example"
-                    {...formik.getFieldProps("educationTermId")}
-                    isValid={isValid(formik, "educationTermId")}
-                    isInvalid={isInValid(formik, "educationTermId")}
-                  >
-                    <option>Select Term</option>
-                    {terms.map((item) => (
-                      <option value={item.id} key={item.id}>
-                        {item.term} {item.startDate}
-                      </option>
-                    ))}
-                  </Form.Select>
+                <FloatingLabel
+                  controlId="date"
+                  label="Date"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type="date"
+                    placeholder=""
+                    {...formik.getFieldProps("date")}
+                    isValid={isValid(formik, "date")}
+                    isInvalid={isInValid(formik, "date")}
+                  />
                   <Form.Control.Feedback type="invalid">
-                    {formik.errors.educationTermId}
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-              </Col>
-
-              <Col>
-                <FloatingLabel controlId="day" label="Day" className="mb-3">
-                  <Form.Select
-                    aria-label="Floating label select example"
-                    {...formik.getFieldProps("day")}
-                    isValid={isValid(formik, "day")}
-                    isInvalid={isInValid(formik, "day")}
-                  >
-                    <option>Select Day</option>
-                    {config.days.map((day) => (
-                      <option value={day} key={day}>
-                        {day}
-                      </option>
-                    ))}
-                  </Form.Select>
-                  <Form.Control.Feedback type="invalid">
-                    {formik.errors.day}
+                    {formik.touched.date && formik.errors.date}
                   </Form.Control.Feedback>
                 </FloatingLabel>
               </Col>
@@ -190,7 +148,7 @@ const NewLessonProgramForm = () => {
                     isInvalid={isInValid(formik, "startTime")}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {formik.errors.startTime}
+                    {formik.touched.startTime && formik.errors.startTime}
                   </Form.Control.Feedback>
                 </FloatingLabel>
               </Col>
@@ -209,10 +167,30 @@ const NewLessonProgramForm = () => {
                     isInvalid={isInValid(formik, "stopTime")}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {formik.errors.stopTime}
+                    {formik.touched.stopTime && formik.errors.stopTime}
                   </Form.Control.Feedback>
                 </FloatingLabel>
               </Col>
+
+              <Col>
+                <FloatingLabel
+                  controlId="description"
+                  label="Description"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder=""
+                    {...formik.getFieldProps("description")}
+                    isValid={isValid(formik, "description")}
+                    isInvalid={isInValid(formik, "description")}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {formik.touched.description && formik.errors.description}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Col>
+              
             </Row>
             <Row>
               <Col className="text-end">
@@ -236,4 +214,4 @@ const NewLessonProgramForm = () => {
   );
 };
 
-export default NewLessonProgramForm;
+export default NewMeetForm;

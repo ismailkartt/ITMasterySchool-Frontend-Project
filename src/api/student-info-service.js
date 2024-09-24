@@ -18,6 +18,13 @@ export const createStudentInfo = async (payload) => {
     return data;
 }
 
+export const updateStudentInfo = async (payload) => {
+    const resp = await axios.put(`${baseUrl}/studentInfo/update/${payload.id}`,payload,
+        {headers: getAuthHeader()})
+    const data = await resp.data;
+    return data;
+}
+
 export const deleteStudentInfo = async (id) => {
     const resp = await axios.delete(`${baseUrl}/studentInfo/delete/${id}`,
         {headers: getAuthHeader()})

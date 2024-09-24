@@ -51,6 +51,7 @@ const NewEducationTermForm = () => {
   });
 
   const onSubmit = async (values) => {
+    setLoading(true);
     try {
       await createEducationTerm(values);
       formik.resetForm();

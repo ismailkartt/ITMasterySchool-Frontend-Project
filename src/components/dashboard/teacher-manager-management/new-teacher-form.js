@@ -68,6 +68,7 @@ const NewTeacherForm = () => {
   });
 
   const onSubmit = async (values) => {
+    setLoading(true);
     try {
       await createTeacher(values);
       formik.resetForm();

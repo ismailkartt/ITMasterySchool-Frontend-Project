@@ -26,6 +26,7 @@ const LessonList = () => {
   })
 
   const loadData = async (page) => {
+    setLoading(true);
     try {
       const resp = await getLessonsByPage(page, lazyState.rows);
       setList(resp.content);

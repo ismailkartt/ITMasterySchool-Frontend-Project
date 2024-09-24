@@ -26,6 +26,7 @@ const StudentList = () => {
   })
 
   const loadData = async (page) => {
+    setLoading(true);
     try {
       const resp = await getStudentsByPage(page, lazyState.rows);
       setUsers(resp.content);

@@ -25,6 +25,7 @@ const AdminList = () => {
 
 
   const loadData = async (page) => {
+    setLoading(true);
     try {
       const resp = await getAdminsByPage(page, lazyState.rows);
       setUsers(resp.content); 

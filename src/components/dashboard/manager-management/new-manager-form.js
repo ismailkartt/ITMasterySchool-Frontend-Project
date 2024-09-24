@@ -61,6 +61,7 @@ const NewManagerForm = () => {
   });
 
   const onSubmit = async (values) => {
+    setLoading(true);
     try {
       await createManager(values);
       formik.resetForm();

@@ -26,6 +26,7 @@ const AssistantManagerList = () => {
   })
 
   const loadData = async (page) => {
+    setLoading(true);
     try {
       const resp = await getAsisstantManagersByPage(page, lazyState.rows);
       setUsers(resp.content);

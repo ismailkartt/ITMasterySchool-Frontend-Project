@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { swalAlert, swalConfirm } from '../../../helpers/functions/swal'
 import { FaEdit, FaTimes } from 'react-icons/fa'
 import { setCurrentRecord, setListRefreshToken, setOperation } from '../../../store/slices/misc-slice'
-import { deleteTeacher, getTeachersByPage } from '../../../api/teacher-service'
+import { deleteMeet, getMeetsByPage } from '../../../api/meet-service'
 
 
-const TeacherList = () => {
+const MeetList = () => {
   
-  const [users, setUsers] = useState([]);
+  const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalRows, setTotalRows] = useState(0);
   const dispatch = useDispatch();
@@ -26,10 +26,9 @@ const TeacherList = () => {
   })
 
   const loadData = async (page) => {
-    setLoading(true);
     try {
-      const resp = await getTeachersByPage(page, lazyState.rows);
-      setUsers(resp.content);
+      const resp = await getMeetsByPage(page, lazyState.rows);
+      setList(resp.content);
       setTotalRows(resp.totalElements);
     } catch (err) {
       console.log(err);
@@ -38,8 +37,8 @@ const TeacherList = () => {
     }
   }
 
-  const getFullName = (row) => {
-    return `${row.name} ${row.surname}`;
+  const getStudents = (row) => {
+    return ``;
   }
 
   const onPage = (event) => {
@@ -51,9 +50,9 @@ const TeacherList = () => {
     if (!resp.isConfirmed) return;
     setLoading(true);
     try {
-      await deleteTeacher(id);
+      await deleteMeet(id);
       dispatch(setListRefreshToken(Math.random()))
-      swalAlert("Teacher was deleted", "success");
+      swalAlert("Meet was deleted", "success");
     } catch (err) {
       console.log(err);
     } finally {
@@ -97,27 +96,29 @@ const TeacherList = () => {
       <Card>
         <Card.Body>
           <Card.Title className='d-flex justify-content-between'>
-            <span>Teacher List</span>
-            <Button onClick={handleNewUser}>New Teacher</Button> 
+            <span>Meet List</span>
+            <Button onClick={handleNewUser}>New Meet</Button> 
           </Card.Title>
 
           <DataTable
             lazy
-            dataKey="userId"
+            dataKey="id"
             totalRecords={totalRows}
             loading={loading}
-            value={users}
+            value={list}
             paginator
             rows={lazyState.rows}
             first={lazyState.first}
             onPage={onPage}
           >
           
-            <Column body={getFullName} header="Name"></Column> 
-            <Column field="gender" header="Gender"></Column> 
-            <Column field="phoneNumber" header="Phone Number"></Column>
-            <Column field="ssn" header="SSN"></Column>
-            <Column field="username" header="User Name"></Column> 
+            
+            <Column field="date" header="Gender"></Column> 
+            <Column field="startTime" header="Start Time"></Column>
+            <Column field="stopTime" header="End Time"></Column>
+            <Column field="description" header="Description"></Column> 
+
+            <Column body={getStudents} header="Students"></Column> 
             <Column body={getOperationButtons} headerStyle={{width: "120px"}}></Column>  
 
 
@@ -129,4 +130,4 @@ const TeacherList = () => {
   )
 }
 
-export default TeacherList
+export default MeetList

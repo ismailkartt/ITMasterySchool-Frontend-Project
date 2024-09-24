@@ -2,13 +2,13 @@ import React from 'react'
 import PageHeader from '../../components/common/page-header'
 import Spacer from '../../components/common/spacer'
 import { useSelector } from 'react-redux'
-import StudentInfoList from '../../components/dashboard/student-info-management/student-info-list'
-import NewStudentInfoForm from '../../components/dashboard/student-info-management/new-student-info-form'
-import EditStudentInfoForm from '../../components/dashboard/student-info-management/edit-student-info-form'
+import NewMeetForm from '../../components/dashboard/meet-management/new-meet-form'
+import EditMeetForm from '../../components/dashboard/meet-management/edit-meet-form'
+import MeetList from '../../components/dashboard/meet-management/meet-list'
 
 
 
-const StudentInfoManagementPage = () => {
+const MeetManagementPage = () => {
 
     const { currentOperation } = useSelector((state) => state.misc);
 
@@ -19,7 +19,7 @@ const StudentInfoManagementPage = () => {
         {
             currentOperation === "new" && (
                 <>
-                    <NewStudentInfoForm/>
+                    <NewMeetForm/>
                     <Spacer/>
                 </>
             )
@@ -27,15 +27,15 @@ const StudentInfoManagementPage = () => {
         {
             currentOperation === "edit" && (
                 <>
-                    <EditStudentInfoForm/>
+                    <EditMeetForm/>
                     <Spacer/>
                 </>
             )
         }
-        <StudentInfoList/>
+        <MeetList/>
         <Spacer/>
     </>
   )
 }
 
-export default StudentInfoManagementPage
+export default MeetManagementPage

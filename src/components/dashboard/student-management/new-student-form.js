@@ -74,6 +74,7 @@ const NewStudentForm = () => {
   });
 
   const onSubmit = async (values) => {
+    setLoading(true);
     try {
       await createStudent(values);
       formik.resetForm();

@@ -18,8 +18,6 @@ import {
 } from "react-bootstrap";
 import { isInValid, isValid } from "../../../helpers/functions/forms";
 import ButtonLoader from "../../common/button-loader";
-import { config } from "../../../helpers/config";
-import { createEducationTerm } from "../../../api/education-term-service";
 import { createLesson } from "../../../api/lesson-service";
 
 const NewLessonForm = () => {
@@ -40,6 +38,7 @@ const NewLessonForm = () => {
   });
 
   const onSubmit = async (values) => {
+    setLoading(true);
     try {
       await createLesson(values);
       formik.resetForm();

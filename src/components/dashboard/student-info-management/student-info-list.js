@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { Button, Card, Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { swalAlert, swalConfirm } from '../../../helpers/functions/swal'
-import {  FaTimes } from 'react-icons/fa'
-import {   setListRefreshToken, setOperation } from '../../../store/slices/misc-slice'
+import {  FaEdit, FaTimes } from 'react-icons/fa'
+import {   setCurrentRecord, setListRefreshToken, setOperation } from '../../../store/slices/misc-slice'
 import { deleteStudentInfo, getStudentInfoByPage } from '../../../api/student-info-service'
 
 
@@ -26,6 +26,7 @@ const StudentInfoList = () => {
   })
 
   const loadData = async (page) => {
+    setLoading(true);
     try {
       const resp = await getStudentInfoByPage(page, lazyState.rows);
       setList(resp.content);
@@ -36,6 +37,11 @@ const StudentInfoList = () => {
       setLoading(false);
     }
   }
+
+  const handleEdit = (row) => { 
+    dispatch(setCurrentRecord(row));
+    dispatch(setOperation("edit"));
+   }
 
   const onPage = (event) => {
     setlazyState(event);
@@ -75,12 +81,16 @@ const StudentInfoList = () => {
         <Button className='btn-link' onClick={() => handleDelete(row.id)}>
           <FaTimes/>
         </Button>
+        <Button className='btn-link' onClick={() => handleEdit(row)}>
+          <FaEdit/>
+        </Button>
       </div>
     )
   }
 
   const getFullName = (row) => { 
-    return `${row.name} ${row.surname}`
+    const {name,surname} = row.studentResponse;
+    return `${name} ${surname}`
   }
 
   return (

@@ -20,6 +20,7 @@ import LessonManagementPage from '../pages/dashboard/lesson-management-page'
 import StudentManagementPage from '../pages/dashboard/student-management-page'
 import ContactMessagePage from '../pages/dashboard/contact-message-page'
 import StudentInfoManagementPage from '../pages/dashboard/student-info-management-page'
+import MeetManagementPage from '../pages/dashboard/meet-management-page'
 
 
 const router = createBrowserRouter([
@@ -90,8 +91,12 @@ const router = createBrowserRouter([
                         element: <PrivateRoute roles={config.pageRoles.studentInfoManagement}><StudentInfoManagementPage /></PrivateRoute>
                     },
                     {
+                        path: "meet-management",
+                        element: <PrivateRoute roles={config.pageRoles.meetManagement}><MeetManagementPage/></PrivateRoute>
+                    },
+                    {
                         path: "contact-messages",
-                        element: <PrivateRoute roles={config.pageRoles.contactManagement}><ContactMessagePage /></PrivateRoute>
+                        element: <PrivateRoute roles={config.pageRoles.contacts}><ContactMessagePage /></PrivateRoute>
                     }
                 ]
             },

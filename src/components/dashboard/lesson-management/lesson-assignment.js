@@ -37,6 +37,7 @@ const LessonAssignment = () => {
   };
 
   const loadTeachers = async () => {
+    setLoading(true);
     try {
       const data = await getAllTeachers();
       setTeachers(data);

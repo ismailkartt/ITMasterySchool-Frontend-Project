@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
   setListRefreshToken,
@@ -19,27 +19,19 @@ import {
 import { isInValid, isValid } from "../../../helpers/functions/forms";
 import ButtonLoader from "../../common/button-loader";
 import { getAllStudent } from "../../../api/student-service";
+import { updateStudentInfo } from "../../../api/student-info-service";
 import { getAllLessonProgramsByTeacher } from "../../../api/lesson-program-service";
 import { getAllEducationTerm } from "../../../api/education-term-service";
-import { createStudentInfo } from "../../../api/student-info-service";
 
-const NewStudentInfoForm = () => {
+const EditStudentInfoForm = () => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [lessons, setLessons] = useState([]);
   const [students, setStudents] = useState([]);
   const [educationTerms, setEducationTerms] = useState([]);
+  const { currentRecord } = useSelector((state) => state.misc);
 
-
-  const initialValues = {
-    absentee: "",
-    educationTermId: "",
-    finalExam: "",
-    infoNote: "",
-    lessonId: "",
-    midtermExam: "",
-    studentId: "",
-  };
+  const initialValues = null;
 
   const validationSchema = Yup.object({
     absentee: Yup.number().required("Required"),
@@ -48,7 +40,9 @@ const NewStudentInfoForm = () => {
       .min(0, "Minimum 0")
       .max(100, "Max 100")
       .required("Required"),
-    infoNote: Yup.string().min(10, "At least 10 characters").required("Required"),
+    infoNote: Yup.string()
+      .min(10, "At least 10 characters")
+      .required("Required"),
     lessonId: Yup.number().required("Required"),
     midtermExam: Yup.number()
       .min(0, "Minimum 0")
@@ -60,11 +54,11 @@ const NewStudentInfoForm = () => {
   const onSubmit = async (values) => {
     setLoading(true);
     try {
-      await createStudentInfo(values);
+      await updateStudentInfo(values);
       formik.resetForm();
       dispatch(setListRefreshToken(Math.random()));
       dispatch(setOperation(null));
-      swalAlert("Student info was created successfully", "success");
+      swalAlert("Student info was updated successfully", "success");
     } catch (err) {
       console.log(err);
       const errMsg = err.response.data.message;
@@ -83,6 +77,7 @@ const NewStudentInfoForm = () => {
     initialValues,
     validationSchema,
     onSubmit,
+    enableReinitialize: true,
   });
 
   const loadLessons = async () => {
@@ -119,17 +114,36 @@ const NewStudentInfoForm = () => {
     }
   };
 
+  
+
   useEffect(() => {
-    loadLessons();
-    loadStudents();
-    loadEducationTerms();
+     loadLessons();
+     loadStudents();
+     loadEducationTerms();
+     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+
+    const payload = {
+      ...currentRecord,
+      studentId: currentRecord.studentResponse.userId,
+    };
+
+    delete payload.studentResponse;
+
+    formik.setValues(payload);
+    setLoading(false);
+    
+  }, [currentRecord])
+  
+  if(loading) return null;
 
   return (
     <Container>
       <Card>
         <Card.Body>
-          <Card.Title>New Student</Card.Title>
+          <Card.Title>Edit Student</Card.Title>
           <Form noValidate onSubmit={formik.handleSubmit}>
             <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3">
               <Col>
@@ -146,7 +160,6 @@ const NewStudentInfoForm = () => {
                         {lesson.label}
                       </option>
                     ))}
-                    
                   </Form.Select>
                   <Form.Control.Feedback type="invalid">
                     {formik.touched.lessonId && formik.errors.lessonId}
@@ -167,7 +180,6 @@ const NewStudentInfoForm = () => {
                         {student.name} {student.surname}
                       </option>
                     ))}
-                    
                   </Form.Select>
                   <Form.Control.Feedback type="invalid">
                     {formik.touched.studentId && formik.errors.studentId}
@@ -189,10 +201,10 @@ const NewStudentInfoForm = () => {
                         {term.term} {term.startDate}
                       </option>
                     ))}
-                    
                   </Form.Select>
                   <Form.Control.Feedback type="invalid">
-                    {formik.touched.educationTermId && formik.errors.educationTermId}
+                    {formik.touched.educationTermId &&
+                      formik.errors.educationTermId}
                   </Form.Control.Feedback>
                 </FloatingLabel>
               </Col>
@@ -284,7 +296,7 @@ const NewStudentInfoForm = () => {
                   disabled={!(formik.dirty && formik.isValid) || loading}
                   className="ms-3"
                 >
-                  {loading && <ButtonLoader />}Create
+                  {loading && <ButtonLoader />}Update
                 </Button>
               </Col>
             </Row>
@@ -295,4 +307,4 @@ const NewStudentInfoForm = () => {
   );
 };
 
-export default NewStudentInfoForm;
+export default EditStudentInfoForm;

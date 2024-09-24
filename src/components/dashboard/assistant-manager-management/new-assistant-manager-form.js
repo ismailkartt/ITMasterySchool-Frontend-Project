@@ -61,6 +61,7 @@ const NewAssistantManagerForm = () => {
   });
 
   const onSubmit = async (values) => {
+    setLoading(true);
     try {
       await createAsisstantManager(values);
       formik.resetForm();
