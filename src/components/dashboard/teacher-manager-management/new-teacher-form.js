@@ -43,7 +43,7 @@ const NewTeacherForm = () => {
     name: Yup.string().required("Required"),
     username: Yup.string().required("Required"),
     surname: Yup.string().required("Required"),
-    lessonsIdList: Yup.array().required("Required"),
+    lessonsIdList: Yup.array().min(1,"Required").required("Required"),
     password: Yup.string()
       .required("Required")
       .min(8, "At least 8 characters")
@@ -282,9 +282,6 @@ const NewTeacherForm = () => {
                   }}
                   panelStyle={{
                     maxWidth: "100%",
-                  }}
-                  valueStyle={{
-                    maxWidth: "calc(100% - 32px)",
                   }}
                 />
               </Col>

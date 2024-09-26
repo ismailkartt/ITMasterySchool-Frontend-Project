@@ -38,7 +38,7 @@ const MeetList = () => {
   }
 
   const getStudents = (row) => {
-    return ``;
+    return row.students.map((student)=> `${student.name} ${student.surname}`).join("-");
   }
 
   const onPage = (event) => {

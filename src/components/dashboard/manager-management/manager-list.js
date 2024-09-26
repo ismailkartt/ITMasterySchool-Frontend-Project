@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { swalAlert, swalConfirm } from '../../../helpers/functions/swal'
 import { FaEdit, FaTimes } from 'react-icons/fa'
 import { deleteManager, getManagersByPage } from '../../../api/manager-service'
-import { setCurrentRecord, setOperation } from '../../../store/slices/misc-slice'
+import { setCurrentRecord, setListRefreshToken, setOperation } from '../../../store/slices/misc-slice'
 
 
 const ManagerList = () => {
@@ -52,6 +52,7 @@ const ManagerList = () => {
     setLoading(true);
     try {
       await deleteManager(id);
+      dispatch(setListRefreshToken(Math.random()));
       swalAlert("Manager was deleted", "success");
     } catch (err) {
       console.log(err);

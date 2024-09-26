@@ -37,11 +37,11 @@ const NewMeetForm = () => {
   };
 
   const validationSchema = Yup.object({
-    description: Yup.string().required("Required"),
+    description: Yup.string().min(2,"Min 2 chars").max(16,"Max 2 chars").required("Required"),
     startTime: Yup.string().required("Required"),
     stopTime: Yup.string().required("Required"),
     date: Yup.date().required("Required"),
-    studentIds: Yup.array().required("Required"),
+    studentIds: Yup.array().min(1,"Required").required("Required"),
   });
 
   const onSubmit = async (values) => {
@@ -75,7 +75,8 @@ const NewMeetForm = () => {
   const loadStudents = async () => {
     try {
       const data = await getAllStudent();
-      setStudents(data);
+      const arr = data.map((item) => ({id: item.id, name: `${item.name} ${item.surname}`}))
+      setStudents(arr);
     } catch (err) {
       console.log(err);
     }
@@ -102,16 +103,13 @@ const NewMeetForm = () => {
                   display="chip"
                   placeholder="Select students"
                   className="w-full"
-                  optionValue="userId"
+                  optionValue="id"
                   optionLabel="name"
                   style={{
                     width: "100%",
                   }}
                   panelStyle={{
                     maxWidth: "100%",
-                  }}
-                  valueStyle={{
-                    maxWidth: "calc(100% - 32px)",
                   }}
                 />
               </Col>

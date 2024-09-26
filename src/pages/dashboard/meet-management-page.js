@@ -14,7 +14,7 @@ const MeetManagementPage = () => {
 
   return (
     <>
-        <PageHeader title="Student Info Management"/>
+        <PageHeader title="Meet Management"/>
         <Spacer/>
         {
             currentOperation === "new" && (

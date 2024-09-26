@@ -4,7 +4,7 @@ import { getAuthHeader } from "./auth-header";
 
 const baseUrl = config.api.baseUrl;
 
-export const getMeetsByPage = async (page=0, size=20, sort="name",type="ASC")=>{
+export const getMeetsByPage = async (page=0, size=20, sort="date",type="ASC")=>{
     const resp = await axios.get(`${baseUrl}/meet/search?page=${page}&size=${size}&sort=${sort}&type=${type}`,
         {headers:getAuthHeader()})
     const data = await resp.data;

@@ -11,7 +11,7 @@ import { deleteAsisstantManager, getAsisstantManagersByPage } from '../../../api
 
 const AssistantManagerList = () => {
   
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalRows, setTotalRows] = useState(0);
   const dispatch = useDispatch();

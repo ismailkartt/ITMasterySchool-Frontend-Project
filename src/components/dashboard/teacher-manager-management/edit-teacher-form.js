@@ -289,9 +289,6 @@ const EditTeacherForm = () => {
                   panelStyle={{
                     maxWidth: "100%",
                   }}
-                  valueStyle={{
-                    maxWidth: "calc(100% - 32px)",
-                  }}
                 />
               </Col>
 

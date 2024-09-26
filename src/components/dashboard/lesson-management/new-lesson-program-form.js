@@ -41,11 +41,11 @@ const NewLessonProgramForm = () => {
   };
 
   const validationSchema = Yup.object({
-    lessonIdList: Yup.array().required("required"),
-    day: Yup.string().required("required").oneOf(config.days, "Invalid day"),
-    educationTermId: Yup.string().required("required"),
-    startTime: Yup.string().required("required"),
-    stopTime: Yup.string().required("required"),
+    lessonIdList: Yup.array().min(1,"Required").required("Required"),
+    day: Yup.string().required("Required").oneOf(config.days, "Invalid day"),
+    educationTermId: Yup.string().required("Required"),
+    startTime: Yup.string().required("Required"),
+    stopTime: Yup.string().required("Required"),
   });
 
   const onSubmit = async (values) => {
@@ -127,9 +127,6 @@ const NewLessonProgramForm = () => {
                   }}
                   panelStyle={{
                     maxWidth: "100%",
-                  }}
-                  valueStyle={{
-                    maxWidth: "calc(100% - 32px)",
                   }}
                 />
               </Col>
