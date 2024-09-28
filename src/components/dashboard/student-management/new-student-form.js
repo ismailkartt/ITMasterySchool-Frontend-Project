@@ -69,7 +69,7 @@ const NewStudentForm = () => {
       .matches(/^\d{3}-\d{3}-\d{4}$/, "Invalid phone number format"),
     ssn: Yup.string()
       .required("Required")
-      .matches(/^\d{3}-\d{2}-\d{4}$/),
+      .matches(/^\d{3}-\d{2}-\d{4}$/,"Invalid ssn number format"),
     email: Yup.string().email("Invalid email").required("Required"),
   });
 
@@ -217,6 +217,8 @@ const NewStudentForm = () => {
                   className="mb-3"
                 >
                   <Form.Control
+                    as={ReactInputMask}
+                    mask="999-999-9999"
                     type="text"
                     placeholder="Phone (XXX-XXX-XXXX)"
                     {...formik.getFieldProps("phoneNumber")}
@@ -289,8 +291,10 @@ const NewStudentForm = () => {
                   className="mb-3"
                 >
                   <Form.Control
+                    as={ReactInputMask}
+                    mask="999-99-9999"
                     type="text"
-                    placeholder="SSN (XXX-XC-XXXX)"
+                    placeholder="SSN (XXX-XX-XXXX)"
                     {...formik.getFieldProps("ssn")}
                     isValid={isValid(formik, "ssn")}
                     isInvalid={isInValid(formik, "ssn")}

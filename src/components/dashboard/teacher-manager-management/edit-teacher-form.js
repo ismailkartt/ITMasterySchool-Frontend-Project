@@ -219,6 +219,8 @@ const EditTeacherForm = () => {
               <Col>
                 <FloatingLabel controlId="phone" label="Phone (XXX-XXX-XXXX)" className="mb-3">
                   <Form.Control
+                    as={ReactInputMask}
+                    mask="999-999-9999"
                     type="text"
                     placeholder="Phone (XXX-XXX-XXXX)"
                     {...formik.getFieldProps("phoneNumber")}
@@ -249,6 +251,8 @@ const EditTeacherForm = () => {
               <Col>
                 <FloatingLabel controlId="ssn" label="SSN (XXX-XX-XXXX)" className="mb-3">
                   <Form.Control
+                    as={ReactInputMask}
+                    mask="999-99-9999"
                     type="text"
                     placeholder="SSN (XXX-XX-XXXX)"
                     {...formik.getFieldProps("ssn")}

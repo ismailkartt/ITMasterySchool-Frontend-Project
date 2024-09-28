@@ -91,7 +91,7 @@ const EditMeetForm = () => {
   };
 
   const loadCurrentStudents = () => { 
-    const currentStudents = currentRecord.students.map((item) => item.id);
+    const currentStudents = currentRecord?.students?.map((item) => item.id);
     formik.setFieldValue("studentIds",currentStudents);
    }
 

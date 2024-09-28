@@ -16,6 +16,8 @@ import {
 import { isInValid, isValid } from "../../../helpers/functions/forms";
 import ButtonLoader from "../../common/button-loader";
 import { updateAsisstantManager } from "../../../api/asisstant-manager-service";
+import ReactInputMask from "react-input-mask-next";
+
 
 const EditAssistantManagerForm = () => {
   const dispatch = useDispatch();
@@ -51,7 +53,7 @@ const EditAssistantManagerForm = () => {
       .matches(/^\d{3}-\d{3}-\d{4}$/, "Invalid phone number format"),
     ssn: Yup.string()
       .required("required")
-      .matches(/^\d{3}-\d{2}-\d{4}$/),
+      .matches(/^\d{3}-\d{2}-\d{4}$/,"Invalid ssn number format"),
   });
 
   const onSubmit = async (values) => {
@@ -182,6 +184,8 @@ const EditAssistantManagerForm = () => {
               <Col>
                 <FloatingLabel controlId="phone" label="Phone" className="mb-3">
                   <Form.Control
+                    as={ReactInputMask}
+                    mask="999-999-9999"
                     type="text"
                     placeholder="XXX-XXX-XXXX"
                     {...formik.getFieldProps("phoneNumber")}
@@ -197,6 +201,8 @@ const EditAssistantManagerForm = () => {
               <Col>
                 <FloatingLabel controlId="ssn" label="SSN" className="mb-3">
                   <Form.Control
+                    as={ReactInputMask}
+                    mask="999-99-9999"
                     type="text"
                     placeholder="XXX-XX-XXXX"
                     {...formik.getFieldProps("ssn")}
