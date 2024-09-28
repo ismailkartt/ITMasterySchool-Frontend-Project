@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
+  setCurrentRecord,
   setListRefreshToken,
   setOperation,
 } from "../../../store/slices/misc-slice";
@@ -84,6 +85,8 @@ const EditMeetForm = () => {
       setStudents(arr);
     } catch (err) {
       console.log(err);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -98,6 +101,7 @@ const EditMeetForm = () => {
 
   useEffect(() => {
     loadCurrentStudents();
+
   }, [currentRecord]);
 
 
@@ -105,7 +109,7 @@ const EditMeetForm = () => {
     <Container>
       <Card>
         <Card.Body>
-          <Card.Title>Edit Student</Card.Title>
+          <Card.Title>Edit Meet</Card.Title>
           <Form noValidate onSubmit={formik.handleSubmit}>
             <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
               <Col>

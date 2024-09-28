@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { swalAlert, swalConfirm } from '../../../helpers/functions/swal'
 import {  FaEdit, FaTimes } from 'react-icons/fa'
 import {   setCurrentRecord, setListRefreshToken, setOperation } from '../../../store/slices/misc-slice'
-import { deleteStudentInfo, getStudentInfoByPage } from '../../../api/student-info-service'
+import { deleteStudentInfo, getStudentInfoByPageForTeacher } from '../../../api/student-info-service'
 
 
 const StudentInfoList = () => {
@@ -28,7 +28,7 @@ const StudentInfoList = () => {
   const loadData = async (page) => {
     setLoading(true);
     try {
-      const resp = await getStudentInfoByPage(page, lazyState.rows);
+      const resp = await getStudentInfoByPageForTeacher(page, lazyState.rows);
       setList(resp.content);
       setTotalRows(resp.totalElements);
     } catch (err) {

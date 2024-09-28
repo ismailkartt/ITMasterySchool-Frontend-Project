@@ -6,8 +6,6 @@ import NewMeetForm from '../../components/dashboard/meet-management/new-meet-for
 import EditMeetForm from '../../components/dashboard/meet-management/edit-meet-form'
 import MeetList from '../../components/dashboard/meet-management/meet-list'
 
-
-
 const MeetManagementPage = () => {
 
     const { currentOperation } = useSelector((state) => state.misc);

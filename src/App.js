@@ -9,6 +9,7 @@ const App = () => {
 
   const [loading, setLoading] = useState(true);
 
+
   const dispatch = useDispatch();
 
   const loadData = async () => { 

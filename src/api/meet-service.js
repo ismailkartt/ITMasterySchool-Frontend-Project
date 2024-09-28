@@ -11,6 +11,13 @@ export const getMeetsByPage = async (page=0, size=20, sort="date",type="ASC")=>{
     return data;
 }
 
+export const getAllMeetsByStudent = async ()=>{
+    const resp = await axios.get(`${baseUrl}/meet/getAllMeetByStudent`,
+        {headers:getAuthHeader()})
+    const data = await resp.data;
+    return data;
+}
+
 export const createMeet = async (payload) => {
     const resp = await axios.post(`${baseUrl}/meet/save`,payload,
         {headers: getAuthHeader()})

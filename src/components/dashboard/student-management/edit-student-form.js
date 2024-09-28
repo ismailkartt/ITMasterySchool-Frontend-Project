@@ -305,7 +305,7 @@ const EditStudentForm = () => {
                   >
                     <option value="">Select Teacher</option>
                     {advisorTeachers.map((item) => (
-                      <option value={item.advisorTeacherId}>
+                      <option value={item.advisorTeacherId} key={item.advisorTeacherId}>
                         {item.teacherName} {item.teacherSurname}
                       </option>
                     ))}

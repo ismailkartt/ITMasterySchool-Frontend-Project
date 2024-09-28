@@ -84,7 +84,7 @@ const MeetList = () => {
         <Button className='btn-link' onClick={() => handleEdit(row)}>
           <FaEdit/>
         </Button>
-        <Button className='btn-link' onClick={() => handleDelete(row.userId)}>
+        <Button className='btn-link' onClick={() => handleDelete(row.id)}>
           <FaTimes/>
         </Button>
       </div>

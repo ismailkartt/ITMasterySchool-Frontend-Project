@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
+  setCurrentRecord,
   setListRefreshToken,
   setOperation,
 } from "../../../store/slices/misc-slice";
@@ -124,10 +125,9 @@ const EditStudentInfoForm = () => {
   }, []);
 
   useEffect(() => {
-
     const payload = {
       ...currentRecord,
-      studentId: currentRecord.studentResponse.userId,
+      studentId: currentRecord?.studentResponse?.userId,
     };
 
     delete payload.studentResponse;

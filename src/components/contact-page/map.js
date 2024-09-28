@@ -2,7 +2,7 @@ import React from "react";
 import { config } from "../../helpers/config";
 
 const Map = () => {
-  console.log("Map URL:", config.contact.mapEmbedURL);
+
   return (
     
       <iframe

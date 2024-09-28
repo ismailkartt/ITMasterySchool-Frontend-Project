@@ -103,7 +103,7 @@ const StudentList = () => {
 
           <DataTable
             lazy
-            dataKey="userId"
+            dataKey="id"
             totalRecords={totalRows}
             loading={loading}
             value={users}

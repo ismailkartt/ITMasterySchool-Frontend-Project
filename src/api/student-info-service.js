@@ -4,8 +4,15 @@ import { getAuthHeader } from "./auth-header";
 
 const baseUrl = config.api.baseUrl;
 
-export const getStudentInfoByPage = async (page=0, size=20, sort="name",type="ASC")=>{
+export const getStudentInfoByPageForTeacher = async (page=0, size=20, sort="name",type="ASC")=>{
     const resp = await axios.get(`${baseUrl}/studentInfo/getAllForTeacher?page=${page}&size=${size}&sort=${sort}&type=${type}`,
+        {headers:getAuthHeader()})
+    const data = await resp.data;
+    return data;
+}
+
+export const getStudentInfoByPageForStudent = async (page=0, size=20, sort="name",type="ASC")=>{
+    const resp = await axios.get(`${baseUrl}/studentInfo/getAllByStudent?page=${page}&size=${size}&sort=${sort}&type=${type}`,
         {headers:getAuthHeader()})
     const data = await resp.data;
     return data;

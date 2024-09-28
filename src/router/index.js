@@ -21,6 +21,8 @@ import StudentManagementPage from '../pages/dashboard/student-management-page'
 import ContactMessagePage from '../pages/dashboard/contact-message-page'
 import StudentInfoManagementPage from '../pages/dashboard/student-info-management-page'
 import MeetManagementPage from '../pages/dashboard/meet-management-page'
+import ChooseLessonPage from '../pages/dashboard/choose-lesson-page'
+import GradeMeetPage from '../pages/dashboard/grade-meet-page'
 
 
 const router = createBrowserRouter([
@@ -97,6 +99,14 @@ const router = createBrowserRouter([
                     {
                         path: "contact-messages",
                         element: <PrivateRoute roles={config.pageRoles.contacts}><ContactMessagePage /></PrivateRoute>
+                    },
+                    {
+                        path: "choose-lesson",
+                        element: <PrivateRoute roles={config.pageRoles.chooseLesson}><ChooseLessonPage /></PrivateRoute>
+                    },
+                    {
+                        path: "grades-meets",
+                        element: <PrivateRoute roles={config.pageRoles.gradesAndMeets}><GradeMeetPage /></PrivateRoute>
                     }
                 ]
             },

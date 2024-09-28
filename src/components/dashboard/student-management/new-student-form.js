@@ -25,7 +25,7 @@ const NewStudentForm = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [advisorTeachers, setAdvisorTeachers] = useState([]);
-  const { currentRecord } = useSelector((state) => state.misc);
+
 
   const initialValues = {
     birthDay: "",
@@ -314,7 +314,7 @@ const NewStudentForm = () => {
                   >
                     <option value="">Select Teacher</option>
                     {advisorTeachers.map((item) => (
-                      <option value={item.advisorTeacherId}>
+                      <option value={item.advisorTeacherId} key={item.advisorTeacherId}>
                         {item.teacherName} {item.teacherSurname}
                       </option>
                     ))}

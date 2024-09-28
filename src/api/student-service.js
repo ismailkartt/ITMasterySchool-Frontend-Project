@@ -39,3 +39,10 @@ export const updateStudent = async (id,payload) => {
     return data;
 }
 
+export const chooseLesson = async (payload) => { 
+    const resp = await axios.post(`${baseUrl}/students/chooseLesson`, payload, {
+      headers: getAuthHeader(),
+    });
+    const data = await resp.data;
+    return data;
+   }
