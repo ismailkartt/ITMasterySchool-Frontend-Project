@@ -13,7 +13,7 @@ import LessonAssignment from "../../components/dashboard/lesson-management/lesso
 
 const LessonManagementPage = () => {
 
-    const [key, setKey] = useState('home');
+    const [key, setKey] = useState('terms');
     const { currentOperation } = useSelector(state => state.misc);
 
   return (
