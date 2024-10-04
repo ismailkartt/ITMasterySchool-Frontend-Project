@@ -21,8 +21,8 @@ const LoginForm = () => {
     const navigate = useNavigate();
 
     const initialValues = {
-        password: "Berra123@",
-        username: "Berra",
+        password: "Deneme12",
+        username: "ismail",
     }
     const validationSchema = Yup.object({
         password: Yup.string().required("Required"),
